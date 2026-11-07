@@ -4,14 +4,14 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Flame, Sparkles, Clock, Star } from 'lucide-react'
-import { BusinessConfig } from '../types'
+import { HeroContentData } from '../types'
 import { useCart } from '../context/CartContext'
 
 interface HeroProps {
-  business: BusinessConfig
+  hero: HeroContentData
 }
 
-export default function Hero({ business }: HeroProps) {
+export default function Hero({ hero }: HeroProps) {
   const { openCart } = useCart()
 
   return (
@@ -27,23 +27,22 @@ export default function Hero({ business }: HeroProps) {
             {/* Badge de Prestigio */}
             <div className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50/80 px-4 py-1.5 text-xs font-semibold text-orange-800 shadow-sm">
               <Sparkles className="h-3.5 w-3.5 text-orange-600 animate-pulse" />
-              <span>Auténtica Tradición & Sabor Artesanal</span>
+              <span>{hero.badge || 'Auténtica Tradición & Sabor Artesanal'}</span>
             </div>
 
             {/* Titular Principal de Alto Impacto */}
             <div className="space-y-4">
               <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-stone-900 leading-[1.12]">
-                {business.nombreRestaurante}
+                {hero.tituloPrincipal}
               </h1>
               <p className="font-serif italic text-2xl sm:text-3xl text-orange-700 font-normal">
-                {business.eslogan}
+                {hero.subtitulo}
               </p>
             </div>
 
             {/* Párrafo Descriptivo */}
             <p className="text-stone-600 font-sans text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Masa de maíz peto recién molido, dorada al carbón de leña y rellena con carnes ahumadas
-              lentamente y quesos frescos. Haz tu pedido y recíbelo caliente en tu puerta.
+              {hero.descripcion}
             </p>
 
             {/* Botones de Acción / CTAs */}
@@ -52,7 +51,7 @@ export default function Hero({ business }: HeroProps) {
                 href="#menu"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl bg-orange-600 hover:bg-orange-700 px-8 py-4 text-base font-bold text-white shadow-lg shadow-orange-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <span>Ver Nuestro Menú</span>
+                <span>{hero.textoCTA || 'Ver Nuestro Menú'}</span>
                 <ArrowRight className="h-5 w-5" />
               </Link>
 
@@ -74,7 +73,7 @@ export default function Hero({ business }: HeroProps) {
                   ))}
                 </div>
                 <span className="font-bold text-stone-800">4.9 / 5</span>
-                <span>(más de 1.200 reseñas)</span>
+                <span>({hero.ratingText || 'más de 1.200 clientes felices'})</span>
               </div>
               <div className="h-4 w-px bg-stone-300 hidden sm:block" />
               <div className="flex items-center gap-2 font-medium text-stone-700">
@@ -87,11 +86,10 @@ export default function Hero({ business }: HeroProps) {
           {/* Columna Derecha: Imagen Principal de Impacto con Tarjetas Flotantes */}
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
-              {/* Contenedor de Imagen con Esquinas Redondeadas y Sombra Editorial */}
               <div className="relative h-[420px] sm:h-[480px] w-full overflow-hidden rounded-3xl border-4 border-white shadow-2xl bg-stone-100">
                 <Image
-                  src="/images/arepas-1.jpg"
-                  alt="Arepas Gourmet Panda Haus"
+                  src={hero.imagenFondoUrl || '/images/arepas-1.jpg'}
+                  alt={hero.tituloPrincipal}
                   fill
                   priority
                   className="object-cover transition-transform duration-700 hover:scale-105"

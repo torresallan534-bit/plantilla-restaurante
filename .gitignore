@@ -50,3 +50,5 @@ desktop.ini
 *.swo
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel

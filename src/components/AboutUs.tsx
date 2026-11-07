@@ -3,13 +3,13 @@
 import React from 'react'
 import Image from 'next/image'
 import { Sparkles, HeartHandshake, Award, ShieldCheck, Flame } from 'lucide-react'
-import { BusinessConfig } from '../types'
+import { AboutUsContentData } from '../types'
 
 interface AboutUsProps {
-  business: BusinessConfig
+  aboutUs: AboutUsContentData
 }
 
-export default function AboutUs({ business }: AboutUsProps) {
+export default function AboutUs({ aboutUs }: AboutUsProps) {
   return (
     <section id="conocenos" className="py-24 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,27 +18,27 @@ export default function AboutUs({ business }: AboutUsProps) {
           <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1.5 text-xs font-semibold text-amber-800">
               <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-              <span>{business.conocenosBadge || 'Nuestra Historia'}</span>
+              <span>{aboutUs.badge || 'Nuestra Historia'}</span>
             </div>
 
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
-              {business.conocenosTitulo || 'El Auténtico Arte de la Masa y el Fuego Lento'}
+              {aboutUs.titulo || 'El Auténtico Arte de la Masa y el Fuego Lento'}
             </h2>
 
             <div className="space-y-4 text-stone-600 font-sans leading-relaxed text-base sm:text-lg">
               <p>
-                {business.conocenosParrafo1 ||
+                {aboutUs.parrafo1 ||
                   'Nacimos con una sola obsesión: rescatar el sabor auténtico del maíz peto molido en casa y combinarlo con rellenos generosos, carnes ahumadas al carbón y queso artesanal de campo.'}
               </p>
               <p className="text-stone-500 text-sm sm:text-base">
-                {business.conocenosParrafo2 ||
+                {aboutUs.parrafo2 ||
                   'Cada arepa y plato que sale de nuestra cocina es amasado a mano en el momento. Creemos que la buena comida une a las personas y cada bocado debe despertar memorias de hogar.'}
               </p>
             </div>
 
             {/* Cuadrícula de Métricas / Estadísticas */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
-              {(business.stats || []).map((stat, idx) => (
+              {(aboutUs.stats || []).map((stat, idx) => (
                 <div
                   key={idx}
                   className="rounded-2xl border border-stone-100 bg-stone-50/60 p-4 transition hover:bg-orange-50/40 hover:border-orange-100 hover:shadow-sm"
@@ -71,7 +71,7 @@ export default function AboutUs({ business }: AboutUsProps) {
               {/* Bloque Bento 1: Imagen Grande Vertical */}
               <div className="col-span-7 relative h-72 sm:h-96 rounded-3xl overflow-hidden border border-stone-200/80 shadow-md group">
                 <Image
-                  src="/images/arepas-1.jpg"
+                  src={aboutUs.imagen1Url || '/images/arepas-1.jpg'}
                   alt="Arepas Rellenas en preparación artesanal"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -92,7 +92,7 @@ export default function AboutUs({ business }: AboutUsProps) {
                 {/* Bloque Bento 2: Imagen horizontal */}
                 <div className="relative h-36 sm:h-44 rounded-3xl overflow-hidden border border-stone-200/80 shadow-sm group">
                   <Image
-                    src="/images/arepas-2.jpg"
+                    src={aboutUs.imagen2Url || '/images/arepas-2.jpg'}
                     alt="Cocción al carbón"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -102,10 +102,10 @@ export default function AboutUs({ business }: AboutUsProps) {
                   </div>
                 </div>
 
-                {/* Bloque Bento 3: Imagen cuadrada o detalle */}
+                {/* Bloque Bento 3: Imagen detalle */}
                 <div className="relative h-32 sm:h-48 rounded-3xl overflow-hidden border border-stone-200/80 shadow-sm group">
                   <Image
-                    src="/images/arepas-3.jpg"
+                    src={aboutUs.imagen3Url || '/images/arepas-3.jpg'}
                     alt="Doble queso derretido"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -119,7 +119,7 @@ export default function AboutUs({ business }: AboutUsProps) {
                 </div>
               </div>
 
-              {/* Bloque Bento 4 Inferior: Tarjeta de Valor / Banner Editorial */}
+              {/* Bloque Bento 4 Inferior: Tarjeta de Valor */}
               <div className="col-span-12 rounded-3xl border border-orange-100 bg-orange-50/70 p-5 flex items-center justify-between shadow-soft">
                 <div className="flex items-center gap-3.5">
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-600 text-white font-bold shadow-sm">
@@ -127,10 +127,10 @@ export default function AboutUs({ business }: AboutUsProps) {
                   </div>
                   <div>
                     <h4 className="font-serif font-bold text-sm sm:text-base text-stone-900">
-                      Garantía de Sabor de Panda Haus
+                      Garantía de Calidad Artesanal
                     </h4>
                     <p className="text-xs text-stone-600 font-sans">
-                      Si tu arepa no llega caliente y crujiente, te la cambiamos de inmediato.
+                      Cada plato es preparado al momento para garantizar frescura y temperatura ideal.
                     </p>
                   </div>
                 </div>

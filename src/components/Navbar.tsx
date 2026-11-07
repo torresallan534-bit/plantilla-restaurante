@@ -5,13 +5,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingBag, MessageCircle, Menu as MenuIcon, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
-import { BusinessConfig } from '../types'
+import { ThemeBranding, SalesShipping } from '../types'
 
 interface NavbarProps {
-  business: BusinessConfig
+  theme: ThemeBranding
+  salesShipping: SalesShipping
 }
 
-export default function Navbar({ business }: NavbarProps) {
+export default function Navbar({ theme, salesShipping }: NavbarProps) {
   const { totalItems, openCart } = useCart()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -24,7 +25,7 @@ export default function Navbar({ business }: NavbarProps) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const cleanPhone = (business.numeroWhatsApp || '573001234567').replace(/\D/g, '')
+  const cleanPhone = (salesShipping.numeroWhatsApp || '573001234567').replace(/\D/g, '')
 
   return (
     <header
@@ -36,12 +37,12 @@ export default function Navbar({ business }: NavbarProps) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo Dinámico */}
+          {/* Logo Dinámico Traído desde Payload */}
           <Link href="#inicio" className="flex items-center gap-3 group">
             <div className="relative h-12 w-36 sm:h-14 sm:w-44 transition transform group-hover:scale-[1.02]">
               <Image
-                src={business.logoUrl || '/logo/logo.svg'}
-                alt={business.nombreRestaurante}
+                src={theme.logoUrl || '/logo/logo.svg'}
+                alt={salesShipping.nombreRestaurante}
                 fill
                 priority
                 className="object-contain object-left"
@@ -79,7 +80,7 @@ export default function Navbar({ business }: NavbarProps) {
 
           {/* Acciones (Carrito + Botón WhatsApp) */}
           <div className="flex items-center gap-3">
-            {/* Botón Carrito */}
+            {/* Botón Carrito con Contador */}
             <button
               onClick={openCart}
               className="relative flex items-center gap-2 rounded-2xl bg-stone-100 hover:bg-orange-50 px-3.5 py-2.5 text-sm font-semibold text-stone-800 transition border border-stone-200/80 group"

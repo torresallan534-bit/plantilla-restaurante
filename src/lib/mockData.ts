@@ -1,22 +1,64 @@
-import { BusinessConfig, Category, Product } from '../types'
+import {
+  ThemeBranding,
+  SalesShipping,
+  HeroContentData,
+  FooterContentData,
+  AboutUsContentData,
+  Category,
+  Product,
+} from '../types'
 
-export const mockBusinessConfig: BusinessConfig = {
-  nombreRestaurante: 'Panda Arepas & Grill',
-  eslogan: 'El verdadero sabor del maíz artesanal y la brasa viva.',
-  numeroWhatsApp: '573001234567',
-  mensajePredeterminadoWhatsApp: 'Hola {restaurante}, soy {cliente}, para pedir lo siguiente:',
+export const mockThemeBranding: ThemeBranding = {
+  primaryColor: '#C2410C',
+  secondaryColor: '#D97706',
+  backgroundColor: '#FAF8F5',
+  surfaceColor: '#FFFFFF',
+  textColor: '#1C1917',
   logoUrl: '/logo/logo.svg',
+}
+
+export const mockSalesShipping: SalesShipping = {
+  nombreRestaurante: 'Panda Arepas & Grill',
+  numeroWhatsApp: '573001234567',
+  mensajePredeterminado: 'Hola {restaurante}, soy {nombre}, para pedir:',
+  costoDomicilio: 5000,
   direccionFisica: 'Carrera 7 # 68-12, Zona Gourmet',
   horarios: [
     { dias: 'Lunes a Jueves', horas: '11:30 AM - 9:30 PM' },
     { dias: 'Viernes y Sábados', horas: '11:30 AM - 11:00 PM' },
     { dias: 'Domingos y Festivos', horas: '12:00 PM - 9:00 PM' },
   ],
-  conocenosBadge: 'Tradición & Fuego Lento',
-  conocenosTitulo: 'Amor por el Maíz Peto y la Gastronomía Artesanal',
-  conocenosParrafo1:
+}
+
+export const mockHeroContent: HeroContentData = {
+  tituloPrincipal: 'Panda Arepas & Grill',
+  subtitulo: 'El verdadero sabor del maíz artesanal y la brasa viva.',
+  descripcion:
+    'Masa de maíz peto recién molido, dorada al carbón de leña y rellena con carnes ahumadas lentamente y quesos frescos. Haz tu pedido y recíbelo caliente en tu puerta.',
+  badge: 'Auténtica Tradición & Sabor Artesanal',
+  textoCTA: 'Ver Nuestro Menú',
+  imagenFondoUrl: '/images/arepas-1.jpg',
+  ratingText: '4.9 / 5 (más de 1.200 clientes felices)',
+}
+
+export const mockFooterContent: FooterContentData = {
+  tituloSEO: 'Panda Arepas & Grill - Maestros del Carbón',
+  descripcionSEO:
+    'Auténtico maíz peto procesado artesanalmente día a día. Rellenos generosos y el mejor toque ahumado al carbón.',
+  creditos: 'Desarrollado con pasión por Panda Haus Agencia Web',
+  redesSociales: [
+    { red: 'instagram', url: 'https://instagram.com' },
+    { red: 'facebook', url: 'https://facebook.com' },
+    { red: 'tiktok', url: 'https://tiktok.com' },
+  ],
+}
+
+export const mockAboutUsContent: AboutUsContentData = {
+  badge: 'Nuestra Historia & Pasión',
+  titulo: 'Amor por el Maíz Peto y la Gastronomía Artesanal',
+  parrafo1:
     'Nuestra historia comenzó con una receta familiar guardada por generaciones: moler maíz 100% natural, sin harinas procesadas, logrando esa textura crocante por fuera y suave por dentro que reconforta el alma.',
-  conocenosParrafo2:
+  parrafo2:
     'Rellenamos cada arepa al momento con carnes jugosas cocinadas a fuego lento durante 8 horas, quesos de campo frescos y salsas secretas elaboradas diariamente. Cada pedido es una celebración de sabor.',
   stats: [
     { numero: '10+', etiqueta: 'Años de Experiencia' },
@@ -24,6 +66,9 @@ export const mockBusinessConfig: BusinessConfig = {
     { numero: '4.9 ★', etiqueta: 'Satisfacción Clientes' },
     { numero: '15k+', etiqueta: 'Arepas Servidas' },
   ],
+  imagen1Url: '/images/arepas-1.jpg',
+  imagen2Url: '/images/arepas-2.jpg',
+  imagen3Url: '/images/arepas-3.jpg',
 }
 
 export const mockCategories: Category[] = [
@@ -97,13 +142,13 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod-5',
-    nombre: 'Arepa Choricera Artesanal',
+    nombre: 'Arepa Choricera Artesanal (Edición Limitada)',
     precio: 18000,
     descripcion:
       'Chorizo santarrosano ahumado en leña de roble, cebollitas caramelizadas, chimichurri rústico y queso de hoja.',
     imagenUrl: '/images/arepas-2.jpg',
     categoria: 'parrilla-carbon',
-    disponible: true,
+    disponible: false, // Demostración del botón "Agotado"
     destacado: false,
   },
   {

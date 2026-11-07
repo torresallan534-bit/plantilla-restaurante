@@ -35,7 +35,7 @@ export const Products: CollectionConfig = {
       min: 0,
       admin: {
         placeholder: 'Ej. 18000',
-        description: 'Valor numérico del producto en moneda local (ej. COP o USD).',
+        description: 'Valor del producto en moneda local (ej. COP o USD).',
       },
     },
     {
@@ -44,39 +44,16 @@ export const Products: CollectionConfig = {
       label: 'Descripción Apetitosa',
       required: true,
       admin: {
-        placeholder: 'Describe los ingredientes frescos, preparación artesanal o acompañamientos...',
+        placeholder: 'Describe los ingredientes frescos y preparación artesanal...',
       },
-    },
-    {
-      name: 'imagen',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Fotografía del Producto',
-      required: false,
-    },
-    {
-      name: 'imagenUrl',
-      type: 'text',
-      label: 'URL o Ruta Local de Imagen (Fallback)',
-      admin: {
-        description: 'Ruta local directa como /images/arepas-1.jpg o URL externa si no subes archivo a Media.',
-      },
-    },
-    {
-      name: 'categoria',
-      type: 'relationship',
-      relationTo: 'categories',
-      label: 'Categoría del Menú',
-      required: true,
-      hasMany: false,
     },
     {
       name: 'disponible',
       type: 'checkbox',
-      label: 'Disponible para Pedidos',
+      label: 'Disponible para Pedidos (Interruptor de Agotado)',
       defaultValue: true,
       admin: {
-        description: 'Desmarcar si el producto se ha agotado en el día.',
+        description: 'Desmarcar para marcar automáticamente como Agotado en la web y deshabilitar compras.',
       },
     },
     {
@@ -87,6 +64,29 @@ export const Products: CollectionConfig = {
       admin: {
         description: 'Muestra una insignia dorada "Favorito" en el menú.',
       },
+    },
+    {
+      name: 'imagen',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Fotografía del Producto (Subir archivo)',
+      required: false,
+    },
+    {
+      name: 'imagenUrl',
+      type: 'text',
+      label: 'Ruta o URL de Imagen (Fallback)',
+      admin: {
+        description: 'Ruta local como /images/arepas-1.jpg o URL externa.',
+      },
+    },
+    {
+      name: 'categoria',
+      type: 'relationship',
+      relationTo: 'categories',
+      label: 'Categoría del Menú',
+      required: true,
+      hasMany: false,
     },
   ],
 }

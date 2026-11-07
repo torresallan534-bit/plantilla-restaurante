@@ -2,15 +2,27 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { X, Plus, Minus, Trash2, ShoppingBag, Send, MapPin, User, FileText, ArrowRight } from 'lucide-react'
+import {
+  X,
+  Plus,
+  Minus,
+  Trash2,
+  ShoppingBag,
+  Send,
+  MapPin,
+  User,
+  FileText,
+  ArrowRight,
+  Truck,
+} from 'lucide-react'
 import { useCart } from '../context/CartContext'
-import { BusinessConfig } from '../types'
+import { SalesShipping } from '../types'
 
 interface CartDrawerProps {
-  business: BusinessConfig
+  salesShipping: SalesShipping
 }
 
-export default function CartDrawer({ business }: CartDrawerProps) {
+export default function CartDrawer({ salesShipping }: CartDrawerProps) {
   const {
     items,
     isCartOpen,
@@ -19,7 +31,6 @@ export default function CartDrawer({ business }: CartDrawerProps) {
     removeFromCart,
     clearCart,
     totalItems,
-    totalPrice,
   } = useCart()
 
   const [nombreCliente, setNombreCliente] = useState('')
@@ -37,6 +48,11 @@ export default function CartDrawer({ business }: CartDrawerProps) {
       maximumFractionDigits: 0,
     }).format(amount)
   }
+
+  // Cálculos de Subtotal, Costo de Domicilio (dinámico desde Payload) y Total
+  const subtotal = items.reduce((sum, item) => sum + item.quantity * item.product.precio, 0)
+  const costoDomicilio = salesShipping.costoDomicilio ?? 5000
+  const total = subtotal + (items.length > 0 ? costoDomicilio : 0)
 
   const validateForm = () => {
     const newErrors: { nombre?: string; direccion?: string } = {}
@@ -58,29 +74,38 @@ export default function CartDrawer({ business }: CartDrawerProps) {
 
     setIsSubmitting(true)
 
-    const nombreRestaurante = business.nombreRestaurante || 'Panda Arepas & Grill'
-    const cleanPhone = (business.numeroWhatsApp || '573001234567').replace(/\D/g, '')
+    const restaurante = salesShipping.nombreRestaurante || 'Panda Arepas & Grill'
+    const cleanPhone = (salesShipping.numeroWhatsApp || '573001234567').replace(/\D/g, '')
 
-    // Formatear items exactamente con la estructura exigida:
-    // [Cantidad]x [Producto]
+    // Formatear líneas de productos con estructura exacta:
+    // [Cant]x [Producto] - $[Precio]
     const productLines = items
-      .map((item) => `${item.quantity}x ${item.product.nombre}`)
-      .join('\n\n')
+      .map(
+        (item) =>
+          `${item.quantity}x ${item.product.nombre} - ${formatPrice(
+            item.product.precio * item.quantity
+          )}`
+      )
+      .join('\n')
 
     // Estructura exacta requerida:
-    // "Hola [NombreRestaurante], soy [NombreCliente], para pedir lo siguiente:
+    // "Hola [Restaurante], soy [Nombre], para pedir:
     //
-    // [Cantidad]x [Producto]
+    // [Cant]x [Producto] - $[Precio]
     //
-    // [Cantidad]x [Producto]
-    // Para esta dirección: [Dirección del cliente]"
-    let message = `Hola ${nombreRestaurante}, soy ${nombreCliente.trim()}, para pedir lo siguiente:\n\n${productLines}\nPara esta dirección: ${direccion.trim()}`
+    // Subtotal: $[Subtotal]
+    // Domicilio: $[CostoDomicilio]
+    // Total a pagar: $[Total]
+    // Dirección: [Dirección]"
+    let message = `Hola ${restaurante}, soy ${nombreCliente.trim()}, para pedir:\n\n${productLines}\n\nSubtotal: ${formatPrice(
+      subtotal
+    )}\nDomicilio: ${formatPrice(costoDomicilio)}\nTotal a pagar: ${formatPrice(
+      total
+    )}\nDirección: ${direccion.trim()}`
 
     if (notas.trim()) {
       message += `\nNotas adicionales: ${notas.trim()}`
     }
-
-    message += `\nTotal: ${formatPrice(totalPrice)}`
 
     const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`
 
@@ -281,7 +306,7 @@ export default function CartDrawer({ business }: CartDrawerProps) {
                           type="text"
                           value={notas}
                           onChange={(e) => setNotas(e.target.value)}
-                          placeholder="Ej. Salsa picante aparte, portería"
+                          placeholder="Ej. Salsa de ajo aparte, portería"
                           className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-3 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                       </div>
@@ -292,21 +317,26 @@ export default function CartDrawer({ business }: CartDrawerProps) {
             )}
           </div>
 
-          {/* Footer del Carrito con Checkout de WhatsApp */}
+          {/* Footer del Carrito con Resumen: Subtotal + Domicilio + Total */}
           {items.length > 0 && (
             <div className="border-t border-stone-100 bg-stone-50/70 p-6 space-y-4">
-              <div className="space-y-1.5 text-xs text-stone-500 font-sans">
+              <div className="space-y-2 text-xs text-stone-600 font-sans">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-stone-800">{formatPrice(totalPrice)}</span>
+                  <span className="font-semibold text-stone-900">{formatPrice(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-stone-400">
-                  <span>Costo de Envío</span>
-                  <span className="italic">Por coordinar con el repartidor</span>
+                <div className="flex justify-between items-center text-stone-700">
+                  <span className="flex items-center gap-1.5">
+                    <Truck className="h-3.5 w-3.5 text-orange-600" />
+                    Costo de Domicilio
+                  </span>
+                  <span className="font-semibold text-stone-900">
+                    {formatPrice(costoDomicilio)}
+                  </span>
                 </div>
                 <div className="flex justify-between border-t border-stone-200/80 pt-2 text-base font-bold text-stone-900 font-serif">
-                  <span>Total estimado:</span>
-                  <span className="text-orange-600 font-bold">{formatPrice(totalPrice)}</span>
+                  <span>Total a pagar:</span>
+                  <span className="text-orange-600 font-bold">{formatPrice(total)}</span>
                 </div>
               </div>
 
@@ -317,10 +347,10 @@ export default function CartDrawer({ business }: CartDrawerProps) {
                 className="w-full flex items-center justify-center gap-3 rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 active:scale-[0.99] transition"
               >
                 <Send className="h-4 w-4" />
-                {isSubmitting ? 'Enviando a WhatsApp...' : 'Completar Pedido por WhatsApp'}
+                {isSubmitting ? 'Enviando a WhatsApp...' : 'Enviar Pedido por WhatsApp'}
               </button>
               <p className="text-center text-[11px] text-stone-400 font-sans">
-                Atención rápida y directa sin comisiones ocultas de apps de terceros.
+                Pedido directo sin intermediarios ni cargos de servicio.
               </p>
             </div>
           )}

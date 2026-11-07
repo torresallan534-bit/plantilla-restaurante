@@ -9,7 +9,12 @@ import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
 import { Categories } from './src/collections/Categories'
 import { Products } from './src/collections/Products'
-import { BusinessSettings } from './src/globals/BusinessSettings'
+
+import { ThemeBranding } from './src/globals/ThemeBranding'
+import { SalesShipping } from './src/globals/SalesShipping'
+import { HeroContent } from './src/globals/HeroContent'
+import { FooterContent } from './src/globals/FooterContent'
+import { AboutUsContent } from './src/globals/AboutUsContent'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,11 +26,11 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: '- Panel Restaurante | Panda Haus',
+      titleSuffix: '- Centro de Mando | Panda Haus',
     },
   },
   collections: [Users, Media, Categories, Products],
-  globals: [BusinessSettings],
+  globals: [ThemeBranding, SalesShipping, HeroContent, FooterContent, AboutUsContent],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'panda-haus-restaurant-master-secret-key-32ch',
   typescript: {

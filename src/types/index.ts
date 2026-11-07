@@ -1,27 +1,11 @@
-export interface Category {
-  id: string
-  nombre: string
-  slug: string
-  icono?: string
-  orden: number
-}
-
-export interface MediaItem {
-  id: string
-  url?: string
-  alt?: string
-}
-
-export interface Product {
-  id: string
-  nombre: string
-  precio: number
-  descripcion: string
-  imagen?: MediaItem | string | null
-  imagenUrl?: string
-  categoria: Category | string
-  disponible: boolean
-  destacado?: boolean
+export interface ThemeBranding {
+  primaryColor: string
+  secondaryColor: string
+  backgroundColor: string
+  surfaceColor: string
+  textColor: string
+  logoUrl: string
+  logo?: any
 }
 
 export interface ScheduleItem {
@@ -30,26 +14,72 @@ export interface ScheduleItem {
   horas: string
 }
 
+export interface SalesShipping {
+  nombreRestaurante: string
+  numeroWhatsApp: string
+  mensajePredeterminado: string
+  costoDomicilio: number
+  direccionFisica: string
+  horarios: ScheduleItem[]
+}
+
+export interface HeroContentData {
+  tituloPrincipal: string
+  subtitulo: string
+  descripcion: string
+  badge: string
+  textoCTA: string
+  imagenFondoUrl: string
+  ratingText: string
+}
+
+export interface SocialNetwork {
+  id?: string
+  red: 'instagram' | 'facebook' | 'tiktok' | 'whatsapp'
+  url: string
+}
+
+export interface FooterContentData {
+  tituloSEO: string
+  descripcionSEO: string
+  creditos: string
+  redesSociales: SocialNetwork[]
+}
+
 export interface StatItem {
   id?: string
   numero: string
   etiqueta: string
 }
 
-export interface BusinessConfig {
-  nombreRestaurante: string
-  eslogan: string
-  numeroWhatsApp: string
-  mensajePredeterminadoWhatsApp: string
-  logo?: MediaItem | string | null
-  logoUrl?: string
-  direccionFisica: string
-  horarios: ScheduleItem[]
-  conocenosBadge: string
-  conocenosTitulo: string
-  conocenosParrafo1: string
-  conocenosParrafo2: string
+export interface AboutUsContentData {
+  badge: string
+  titulo: string
+  parrafo1: string
+  parrafo2: string
   stats: StatItem[]
+  imagen1Url: string
+  imagen2Url: string
+  imagen3Url: string
+}
+
+export interface Category {
+  id: string
+  nombre: string
+  slug: string
+  icono?: string
+  orden: number
+}
+
+export interface Product {
+  id: string
+  nombre: string
+  precio: number
+  descripcion: string
+  imagenUrl?: string
+  categoria: Category | string
+  disponible: boolean
+  destacado?: boolean
 }
 
 export interface CartItem {
@@ -59,7 +89,7 @@ export interface CartItem {
 }
 
 export interface CheckoutFormData {
-  nombreCliente: string
+  nombre: string
   direccion: string
   notas?: string
 }

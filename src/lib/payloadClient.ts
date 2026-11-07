@@ -1,73 +1,172 @@
-import { BusinessConfig, Category, Product } from '../types'
-import { mockBusinessConfig, mockCategories, mockProducts } from './mockData'
+import {
+  ThemeBranding,
+  SalesShipping,
+  HeroContentData,
+  FooterContentData,
+  AboutUsContentData,
+  Category,
+  Product,
+} from '../types'
+import {
+  mockThemeBranding,
+  mockSalesShipping,
+  mockHeroContent,
+  mockFooterContent,
+  mockAboutUsContent,
+  mockCategories,
+  mockProducts,
+} from './mockData'
 
-export async function getBusinessSettings(): Promise<BusinessConfig> {
-  if (!process.env.MONGODB_URI) {
-    return mockBusinessConfig
-  }
-
+async function getPayloadInstance() {
+  if (!process.env.MONGODB_URI) return null
   try {
     const { getPayload } = await import('payload')
     const config = await import('@payload-config')
-    const payload = await getPayload({ config: config.default })
+    return await getPayload({ config: config.default })
+  } catch (error) {
+    return null
+  }
+}
 
-    const settings = await payload.findGlobal({
-      slug: 'business-settings',
-    })
+export async function getThemeBranding(): Promise<ThemeBranding> {
+  const payload = await getPayloadInstance()
+  if (!payload) return mockThemeBranding
 
-    if (!settings || !settings.nombreRestaurante) {
-      return mockBusinessConfig
+  try {
+    const data = await payload.findGlobal({ slug: 'theme-branding' })
+    if (!data) return mockThemeBranding
+
+    let logoUrl = data.logoUrl || mockThemeBranding.logoUrl
+    if (data.logo && typeof data.logo === 'object' && 'url' in data.logo) {
+      logoUrl = data.logo.url as string
     }
 
     return {
-      nombreRestaurante: settings.nombreRestaurante || mockBusinessConfig.nombreRestaurante,
-      eslogan: settings.eslogan || mockBusinessConfig.eslogan,
-      numeroWhatsApp: settings.numeroWhatsApp || mockBusinessConfig.numeroWhatsApp,
-      mensajePredeterminadoWhatsApp:
-        settings.mensajePredeterminadoWhatsApp || mockBusinessConfig.mensajePredeterminadoWhatsApp,
-      logoUrl:
-        typeof settings.logo === 'object' && settings.logo && 'url' in settings.logo
-          ? (settings.logo.url as string)
-          : settings.logoUrl || mockBusinessConfig.logoUrl,
-      direccionFisica: settings.direccionFisica || mockBusinessConfig.direccionFisica,
-      horarios:
-        settings.horarios && settings.horarios.length > 0
-          ? (settings.horarios as any)
-          : mockBusinessConfig.horarios,
-      conocenosBadge: settings.conocenosBadge || mockBusinessConfig.conocenosBadge,
-      conocenosTitulo: settings.conocenosTitulo || mockBusinessConfig.conocenosTitulo,
-      conocenosParrafo1: settings.conocenosParrafo1 || mockBusinessConfig.conocenosParrafo1,
-      conocenosParrafo2: settings.conocenosParrafo2 || mockBusinessConfig.conocenosParrafo2,
-      stats:
-        settings.stats && settings.stats.length > 0
-          ? (settings.stats as any)
-          : mockBusinessConfig.stats,
+      primaryColor: data.primaryColor || mockThemeBranding.primaryColor,
+      secondaryColor: data.secondaryColor || mockThemeBranding.secondaryColor,
+      backgroundColor: data.backgroundColor || mockThemeBranding.backgroundColor,
+      surfaceColor: data.surfaceColor || mockThemeBranding.surfaceColor,
+      textColor: data.textColor || mockThemeBranding.textColor,
+      logoUrl,
     }
-  } catch (error) {
-    console.warn('Payload CMS no conectado o inicializando, utilizando fallback de diseño:', error)
-    return mockBusinessConfig
+  } catch (e) {
+    return mockThemeBranding
+  }
+}
+
+export async function getSalesShipping(): Promise<SalesShipping> {
+  const payload = await getPayloadInstance()
+  if (!payload) return mockSalesShipping
+
+  try {
+    const data = await payload.findGlobal({ slug: 'sales-shipping' })
+    if (!data) return mockSalesShipping
+
+    return {
+      nombreRestaurante: data.nombreRestaurante || mockSalesShipping.nombreRestaurante,
+      numeroWhatsApp: data.numeroWhatsApp || mockSalesShipping.numeroWhatsApp,
+      mensajePredeterminado:
+        data.mensajePredeterminado || mockSalesShipping.mensajePredeterminado,
+      costoDomicilio:
+        typeof data.costoDomicilio === 'number'
+          ? data.costoDomicilio
+          : mockSalesShipping.costoDomicilio,
+      direccionFisica: data.direccionFisica || mockSalesShipping.direccionFisica,
+      horarios:
+        data.horarios && data.horarios.length > 0
+          ? (data.horarios as any)
+          : mockSalesShipping.horarios,
+    }
+  } catch (e) {
+    return mockSalesShipping
+  }
+}
+
+export async function getHeroContent(): Promise<HeroContentData> {
+  const payload = await getPayloadInstance()
+  if (!payload) return mockHeroContent
+
+  try {
+    const data = await payload.findGlobal({ slug: 'hero-content' })
+    if (!data) return mockHeroContent
+
+    let imagenFondoUrl = data.imagenFondoUrl || mockHeroContent.imagenFondoUrl
+    if (data.imagenFondo && typeof data.imagenFondo === 'object' && 'url' in data.imagenFondo) {
+      imagenFondoUrl = data.imagenFondo.url as string
+    }
+
+    return {
+      tituloPrincipal: data.tituloPrincipal || mockHeroContent.tituloPrincipal,
+      subtitulo: data.subtitulo || mockHeroContent.subtitulo,
+      descripcion: data.descripcion || mockHeroContent.descripcion,
+      badge: data.badge || mockHeroContent.badge,
+      textoCTA: data.textoCTA || mockHeroContent.textoCTA,
+      imagenFondoUrl,
+      ratingText: data.ratingText || mockHeroContent.ratingText,
+    }
+  } catch (e) {
+    return mockHeroContent
+  }
+}
+
+export async function getFooterContent(): Promise<FooterContentData> {
+  const payload = await getPayloadInstance()
+  if (!payload) return mockFooterContent
+
+  try {
+    const data = await payload.findGlobal({ slug: 'footer-content' })
+    if (!data) return mockFooterContent
+
+    return {
+      tituloSEO: data.tituloSEO || mockFooterContent.tituloSEO,
+      descripcionSEO: data.descripcionSEO || mockFooterContent.descripcionSEO,
+      creditos: data.creditos || mockFooterContent.creditos,
+      redesSociales:
+        data.redesSociales && data.redesSociales.length > 0
+          ? (data.redesSociales as any)
+          : mockFooterContent.redesSociales,
+    }
+  } catch (e) {
+    return mockFooterContent
+  }
+}
+
+export async function getAboutUsContent(): Promise<AboutUsContentData> {
+  const payload = await getPayloadInstance()
+  if (!payload) return mockAboutUsContent
+
+  try {
+    const data = await payload.findGlobal({ slug: 'about-us-content' })
+    if (!data) return mockAboutUsContent
+
+    return {
+      badge: data.badge || mockAboutUsContent.badge,
+      titulo: data.titulo || mockAboutUsContent.titulo,
+      parrafo1: data.parrafo1 || mockAboutUsContent.parrafo1,
+      parrafo2: data.parrafo2 || mockAboutUsContent.parrafo2,
+      stats:
+        data.stats && data.stats.length > 0 ? (data.stats as any) : mockAboutUsContent.stats,
+      imagen1Url: data.imagen1Url || mockAboutUsContent.imagen1Url,
+      imagen2Url: data.imagen2Url || mockAboutUsContent.imagen2Url,
+      imagen3Url: data.imagen3Url || mockAboutUsContent.imagen3Url,
+    }
+  } catch (e) {
+    return mockAboutUsContent
   }
 }
 
 export async function getCategories(): Promise<Category[]> {
-  if (!process.env.MONGODB_URI) {
-    return mockCategories
-  }
+  const payload = await getPayloadInstance()
+  if (!payload) return mockCategories
 
   try {
-    const { getPayload } = await import('payload')
-    const config = await import('@payload-config')
-    const payload = await getPayload({ config: config.default })
-
     const result = await payload.find({
       collection: 'categories',
       sort: 'orden',
       limit: 100,
     })
 
-    if (!result.docs || result.docs.length === 0) {
-      return mockCategories
-    }
+    if (!result.docs || result.docs.length === 0) return mockCategories
 
     return result.docs.map((doc: any) => ({
       id: doc.id,
@@ -76,30 +175,23 @@ export async function getCategories(): Promise<Category[]> {
       icono: doc.icono,
       orden: doc.orden ?? 0,
     }))
-  } catch (error) {
+  } catch (e) {
     return mockCategories
   }
 }
 
 export async function getProducts(): Promise<Product[]> {
-  if (!process.env.MONGODB_URI) {
-    return mockProducts
-  }
+  const payload = await getPayloadInstance()
+  if (!payload) return mockProducts
 
   try {
-    const { getPayload } = await import('payload')
-    const config = await import('@payload-config')
-    const payload = await getPayload({ config: config.default })
-
     const result = await payload.find({
       collection: 'products',
       limit: 100,
       depth: 1,
     })
 
-    if (!result.docs || result.docs.length === 0) {
-      return mockProducts
-    }
+    if (!result.docs || result.docs.length === 0) return mockProducts
 
     return result.docs.map((doc: any) => {
       let imageSrc = doc.imagenUrl || '/images/arepas-1.jpg'
@@ -125,7 +217,7 @@ export async function getProducts(): Promise<Product[]> {
         destacado: doc.destacado ?? false,
       }
     })
-  } catch (error) {
+  } catch (e) {
     return mockProducts
   }
 }

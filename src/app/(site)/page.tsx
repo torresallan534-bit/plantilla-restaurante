@@ -6,40 +6,59 @@ import MenuSection from '@/components/MenuSection'
 import Footer from '@/components/Footer'
 import CartDrawer from '@/components/CartDrawer'
 import WhatsAppFloatingBtn from '@/components/WhatsAppFloatingBtn'
-import { getBusinessSettings, getCategories, getProducts } from '@/lib/payloadClient'
+import {
+  getThemeBranding,
+  getSalesShipping,
+  getHeroContent,
+  getFooterContent,
+  getAboutUsContent,
+  getCategories,
+  getProducts,
+} from '@/lib/payloadClient'
 
-// Revalidar contenido cada 60 segundos o bajo demanda con Payload Hooks
 export const revalidate = 60
 
 export default async function HomePage() {
-  const [business, categories, products] = await Promise.all([
-    getBusinessSettings(),
+  const [
+    theme,
+    salesShipping,
+    hero,
+    footer,
+    aboutUs,
+    categories,
+    products,
+  ] = await Promise.all([
+    getThemeBranding(),
+    getSalesShipping(),
+    getHeroContent(),
+    getFooterContent(),
+    getAboutUsContent(),
     getCategories(),
     getProducts(),
   ])
 
   return (
-    <main className="min-h-screen flex flex-col bg-brand-warm-bg text-stone-900 selection:bg-orange-100 selection:text-orange-900">
-      {/* Barra de Navegación Superior Dinámica */}
-      <Navbar business={business} />
+    <main className="min-h-screen flex flex-col bg-brand-warm-bg text-brand-dark selection:bg-orange-100 selection:text-orange-900">
+      {/* 1. Navbar con logo y datos dinámicos */}
+      <Navbar theme={theme} salesShipping={salesShipping} />
 
-      {/* Hero Section de Alto Impacto */}
-      <Hero business={business} />
+      {/* 2. Hero Section 100% editable desde Payload */}
+      <Hero hero={hero} />
 
-      {/* Sección Conócenos: Dos Columnas & Grilla Bento */}
-      <AboutUs business={business} />
+      {/* 3. Sección Conócenos (Bento Grid) editable desde Payload */}
+      <AboutUs aboutUs={aboutUs} />
 
-      {/* Menú Interactivo: Categorías, Búsqueda y Botón 'Agregar al pedido' */}
+      {/* 4. Menú Interactivo (Core): Categorías, Buscador y Botón de Agotado */}
       <MenuSection categories={categories} products={products} />
 
-      {/* Pie de Página: Horarios, Ubicación y Créditos Panda Haus */}
-      <Footer business={business} />
+      {/* 5. Footer con SEO, Horarios y Redes Sociales */}
+      <Footer footer={footer} salesShipping={salesShipping} theme={theme} />
 
-      {/* Slide-over Carrito Lateral & Checkout Directo a WhatsApp */}
-      <CartDrawer business={business} />
+      {/* 6. Carrito Slide-over con Costo de Domicilio y Checkout formateado */}
+      <CartDrawer salesShipping={salesShipping} />
 
-      {/* Botón Flotante de WhatsApp para Contacto Inmediato */}
-      <WhatsAppFloatingBtn whatsappNumber={business.numeroWhatsApp} />
+      {/* 7. Botón Flotante de WhatsApp para Contacto Inmediato */}
+      <WhatsAppFloatingBtn whatsappNumber={salesShipping.numeroWhatsApp} />
     </main>
   )
 }
