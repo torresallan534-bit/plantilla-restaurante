@@ -88,15 +88,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
       )
       .join('\n')
 
-    // Estructura exacta requerida:
-    // "Hola [Restaurante], soy [Nombre], para pedir:
-    //
-    // [Cant]x [Producto] - $[Precio]
-    //
-    // Subtotal: $[Subtotal]
-    // Domicilio: $[CostoDomicilio]
-    // Total a pagar: $[Total]
-    // Dirección: [Dirección]"
+    // Formato exacto requerido:
     let message = `Hola ${restaurante}, soy ${nombreCliente.trim()}, para pedir:\n\n${productLines}\n\nSubtotal: ${formatPrice(
       subtotal
     )}\nDomicilio: ${formatPrice(costoDomicilio)}\nTotal a pagar: ${formatPrice(
@@ -104,48 +96,44 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     )}\nDirección: ${direccion.trim()}`
 
     if (notas.trim()) {
-      message += `\nNotas adicionales: ${notas.trim()}`
+      message += `\nNotas: ${notas.trim()}`
     }
 
-    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`
 
-    // Abrir WhatsApp en nueva pestaña
+    // Redirigir a WhatsApp
     window.open(whatsappUrl, '_blank')
-
-    setTimeout(() => {
-      setIsSubmitting(false)
-      clearCart()
-      closeCart()
-    }, 1000)
+    setIsSubmitting(false)
   }
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
-      {/* Backdrop con desenfoque suave */}
+      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity animate-fade-in"
         onClick={closeCart}
+        className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
       />
 
-      <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
-        <div className="w-screen max-w-md transform bg-white shadow-2xl transition ease-in-out duration-300 animate-slide-in flex flex-col">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col animate-slide-in">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-stone-100 px-6 py-5 bg-stone-50/50">
+          <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between bg-stone-50/50">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <ShoppingBag className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg font-serif font-bold text-stone-900">Tu Pedido</h2>
+                <h3 className="font-serif font-bold text-lg text-theme-text">Tu Pedido</h3>
                 <p className="text-xs text-stone-500 font-sans">
-                  {totalItems} {totalItems === 1 ? 'producto' : 'productos'} seleccionado
-                  {totalItems === 1 ? '' : 's'}
+                  {totalItems} {totalItems === 1 ? 'producto' : 'productos'} en la orden
                 </p>
               </div>
             </div>
+
             <button
               onClick={closeCart}
-              className="rounded-full p-2 text-stone-400 hover:bg-stone-100 hover:text-stone-700 transition"
+              className="p-2 text-stone-400 hover:text-stone-600 rounded-xl hover:bg-stone-100 transition"
               aria-label="Cerrar carrito"
             >
               <X className="h-5 w-5" />
@@ -159,7 +147,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-stone-100 text-stone-400 mb-4">
                   <ShoppingBag className="h-10 w-10 stroke-[1.5]" />
                 </div>
-                <h3 className="font-serif text-xl font-semibold text-stone-800">
+                <h3 className="font-serif text-xl font-semibold text-theme-text">
                   El carrito está vacío
                 </h3>
                 <p className="mt-2 text-sm text-stone-500 max-w-xs font-sans">
@@ -168,7 +156,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                 </p>
                 <button
                   onClick={closeCart}
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-600 transition shadow-sm"
+                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary transition shadow-sm"
                 >
                   Explorar Menú <ArrowRight className="h-4 w-4" />
                 </button>
@@ -188,10 +176,10 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-serif font-bold text-sm text-stone-900 truncate">
+                        <h4 className="font-serif font-bold text-sm text-theme-text truncate">
                           {item.product.nombre}
                         </h4>
-                        <p className="text-xs font-semibold text-orange-600 mt-0.5">
+                        <p className="text-xs font-semibold text-primary mt-0.5">
                           {formatPrice(item.product.precio)} c/u
                         </p>
                         <div className="flex items-center gap-3 mt-2">
@@ -203,7 +191,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                             >
                               <Minus className="h-3.5 w-3.5" />
                             </button>
-                            <span className="w-8 text-center text-xs font-bold text-stone-800">
+                            <span className="w-8 text-center text-xs font-bold text-theme-text">
                               {item.quantity}
                             </span>
                             <button
@@ -255,7 +243,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                             if (errors.nombre) setErrors({ ...errors, nombre: undefined })
                           }}
                           placeholder="Ej. Juan Pérez"
-                          className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                          className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary ${
                             errors.nombre ? 'border-red-400' : 'border-stone-200'
                           }`}
                         />
@@ -283,7 +271,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                             if (errors.direccion) setErrors({ ...errors, direccion: undefined })
                           }}
                           placeholder="Ej. Cra 15 # 85-30 Apto 402"
-                          className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                          className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary ${
                             errors.direccion ? 'border-red-400' : 'border-stone-200'
                           }`}
                         />
@@ -307,7 +295,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                           value={notas}
                           onChange={(e) => setNotas(e.target.value)}
                           placeholder="Ej. Salsa de ajo aparte, portería"
-                          className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-3 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary"
                         />
                       </div>
                     </div>
@@ -323,20 +311,20 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
               <div className="space-y-2 text-xs text-stone-600 font-sans">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-stone-900">{formatPrice(subtotal)}</span>
+                  <span className="font-semibold text-theme-text">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between items-center text-stone-700">
                   <span className="flex items-center gap-1.5">
-                    <Truck className="h-3.5 w-3.5 text-orange-600" />
+                    <Truck className="h-3.5 w-3.5 text-primary" />
                     Costo de Domicilio
                   </span>
-                  <span className="font-semibold text-stone-900">
+                  <span className="font-semibold text-theme-text">
                     {formatPrice(costoDomicilio)}
                   </span>
                 </div>
-                <div className="flex justify-between border-t border-stone-200/80 pt-2 text-base font-bold text-stone-900 font-serif">
+                <div className="flex justify-between border-t border-stone-200/80 pt-2 text-base font-bold text-theme-text font-serif">
                   <span>Total a pagar:</span>
-                  <span className="text-orange-600 font-bold">{formatPrice(total)}</span>
+                  <span className="text-primary font-bold">{formatPrice(total)}</span>
                 </div>
               </div>
 

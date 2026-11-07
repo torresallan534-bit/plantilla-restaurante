@@ -11,17 +11,17 @@ interface AboutUsProps {
 
 export default function AboutUs({ aboutUs }: AboutUsProps) {
   return (
-    <section id="conocenos" className="py-24 bg-white relative overflow-hidden">
+    <section id="conocenos" className="py-24 bg-theme-surface relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Columna Izquierda: Historia, Pasión y Métricas */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1.5 text-xs font-semibold text-amber-800">
-              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary/10 px-3.5 py-1.5 text-xs font-semibold text-secondary">
+              <Sparkles className="h-3.5 w-3.5 text-secondary" />
               <span>{aboutUs.badge || 'Nuestra Historia'}</span>
             </div>
 
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-theme-text leading-tight">
               {aboutUs.titulo || 'El Auténtico Arte de la Masa y el Fuego Lento'}
             </h2>
 
@@ -41,9 +41,9 @@ export default function AboutUs({ aboutUs }: AboutUsProps) {
               {(aboutUs.stats || []).map((stat, idx) => (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-stone-100 bg-stone-50/60 p-4 transition hover:bg-orange-50/40 hover:border-orange-100 hover:shadow-sm"
+                  className="rounded-2xl border border-stone-100 bg-stone-50/60 p-4 transition hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
                 >
-                  <p className="font-serif text-2xl sm:text-3xl font-bold text-orange-600">
+                  <p className="font-serif text-2xl sm:text-3xl font-bold text-primary">
                     {stat.numero}
                   </p>
                   <p className="text-xs font-medium text-stone-600 mt-1">{stat.etiqueta}</p>
@@ -59,7 +59,7 @@ export default function AboutUs({ aboutUs }: AboutUsProps) {
               </div>
               <div className="h-3 w-px bg-stone-200" />
               <div className="flex items-center gap-1.5 text-stone-700 font-semibold">
-                <HeartHandshake className="h-4 w-4 text-orange-600" />
+                <HeartHandshake className="h-4 w-4 text-primary" />
                 <span>Productores Campesinos Locales</span>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function AboutUs({ aboutUs }: AboutUsProps) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <span className="inline-block rounded-full bg-orange-600 px-2.5 py-1 text-[11px] font-bold text-white uppercase tracking-wider mb-1">
+                  <span className="inline-block rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold text-white uppercase tracking-wider mb-1">
                     Artesanal
                   </span>
                   <p className="font-serif font-bold text-sm text-white">
@@ -98,7 +98,7 @@ export default function AboutUs({ aboutUs }: AboutUsProps) {
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-2.5 right-2.5 rounded-full bg-stone-900/80 backdrop-blur-md p-1.5 text-white">
-                    <Flame className="h-3.5 w-3.5 text-orange-400" />
+                    <Flame className="h-3.5 w-3.5 text-secondary" />
                   </div>
                 </div>
 
@@ -120,13 +120,13 @@ export default function AboutUs({ aboutUs }: AboutUsProps) {
               </div>
 
               {/* Bloque Bento 4 Inferior: Tarjeta de Valor */}
-              <div className="col-span-12 rounded-3xl border border-orange-100 bg-orange-50/70 p-5 flex items-center justify-between shadow-soft">
+              <div className="col-span-12 rounded-3xl border border-primary/20 bg-primary/5 p-5 flex items-center justify-between shadow-soft">
                 <div className="flex items-center gap-3.5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-600 text-white font-bold shadow-sm">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white font-bold shadow-sm">
                     <Award className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-sm sm:text-base text-stone-900">
+                    <h4 className="font-serif font-bold text-sm sm:text-base text-theme-text">
                       Garantía de Calidad Artesanal
                     </h4>
                     <p className="text-xs text-stone-600 font-sans">

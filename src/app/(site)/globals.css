@@ -4,23 +4,24 @@
 
 :root {
   /* ==========================================================================
-     PALETA DE COLOR CORPORATIVA (Fácilmente modificable por SuperAdmin)
+     PALETA DE COLOR PREDETERMINADA (Sobrescrita dinámicamente por Payload CMS)
      ========================================================================== */
-  --color-primary: #c2410c; /* Terracota Artesanal */
-  --color-primary-hover: #9a3412;
-  --color-primary-light: #ffedd5;
+  --color-primary: #c2410c;
+  --color-primary-rgb: 194 65 12;
 
-  --color-accent: #d97706; /* Ámbar Dorado / Maíz */
-  --color-accent-hover: #b45309;
-  --color-accent-light: #fef3c7;
+  --color-secondary: #d97706;
+  --color-secondary-rgb: 217 119 6;
+
+  --color-bg-warm: #faf8f5;
+  --color-bg-warm-rgb: 250 248 245;
 
   --color-surface: #ffffff;
-  --color-bg-warm: #faf8f5; /* Crema cálido editorial */
-  --color-cream: #fffdf9;
+  --color-surface-rgb: 255 255 255;
 
-  --color-dark: #1c1917; /* Stone 900 */
-  --color-dark-muted: #78716c; /* Stone 500 */
-  --color-border: #e7e5e4; /* Stone 200 */
+  --color-text-main: #1c1917;
+  --color-text-main-rgb: 28 25 23;
+
+  --color-border: #e7e5e4;
 }
 
 html {
@@ -29,7 +30,7 @@ html {
 
 body {
   background-color: var(--color-bg-warm);
-  color: var(--color-dark);
+  color: var(--color-text-main);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

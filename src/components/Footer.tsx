@@ -57,7 +57,7 @@ export default function Footer({ footer, salesShipping, theme }: FooterProps) {
                     href={red.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-stone-800 text-stone-300 hover:bg-orange-600 hover:text-white transition"
+                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-stone-800 text-stone-300 hover:bg-primary hover:text-white transition"
                     title={red.red}
                   >
                     {red.red === 'instagram' ? (
@@ -76,7 +76,7 @@ export default function Footer({ footer, salesShipping, theme }: FooterProps) {
           {/* Horarios de Atención Dinámicos */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-2 text-white font-serif font-bold text-lg">
-              <Clock className="h-5 w-5 text-orange-500" />
+              <Clock className="h-5 w-5 text-primary" />
               <h3>Horarios de Atención</h3>
             </div>
 
@@ -96,7 +96,7 @@ export default function Footer({ footer, salesShipping, theme }: FooterProps) {
           {/* Ubicación & Acceso CMS */}
           <div className="lg:col-span-3 space-y-4">
             <div className="flex items-center gap-2 text-white font-serif font-bold text-lg">
-              <MapPin className="h-5 w-5 text-orange-500" />
+              <MapPin className="h-5 w-5 text-primary" />
               <h3>Visítanos</h3>
             </div>
 
@@ -130,7 +130,7 @@ export default function Footer({ footer, salesShipping, theme }: FooterProps) {
           </p>
           <div className="flex items-center gap-1.5 text-stone-400">
             <span>{footer.creditos || 'Desarrollado con pasión por Panda Haus Agencia Web'}</span>
-            <Heart className="h-3.5 w-3.5 text-orange-500 fill-orange-500" />
+            <Heart className="h-3.5 w-3.5 text-primary fill-primary" />
           </div>
         </div>
       </div>

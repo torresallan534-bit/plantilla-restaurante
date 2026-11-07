@@ -33,9 +33,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      className={`group relative flex flex-col rounded-3xl border bg-white p-4 shadow-sm transition-all duration-300 ${
+      className={`group relative flex flex-col rounded-3xl border bg-theme-surface p-4 shadow-sm transition-all duration-300 ${
         isAvailable
-          ? 'border-stone-200/70 hover:shadow-card hover:border-orange-200'
+          ? 'border-stone-200/70 hover:shadow-card hover:border-primary/40'
           : 'border-stone-200/50 opacity-60 grayscale-[35%]'
       }`}
     >
@@ -54,7 +54,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Badges superiores */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-2">
           {product.destacado && isAvailable && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/95 backdrop-blur-sm px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary backdrop-blur-sm px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
               <Star className="h-3 w-3 fill-white" />
               Favorito
             </span>
@@ -78,7 +78,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div>
           <h3
             className={`font-serif text-lg font-bold transition-colors line-clamp-1 ${
-              isAvailable ? 'text-stone-900 group-hover:text-orange-700' : 'text-stone-500'
+              isAvailable ? 'text-theme-text group-hover:text-primary' : 'text-stone-500'
             }`}
           >
             {product.nombre}
@@ -97,7 +97,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
             <span
               className={`font-serif text-lg sm:text-xl font-bold ${
-                isAvailable ? 'text-orange-600' : 'text-stone-400'
+                isAvailable ? 'text-primary' : 'text-stone-400'
               }`}
             >
               {formatPrice(product.precio)}
@@ -113,7 +113,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 ? 'bg-stone-200 text-stone-400 cursor-not-allowed border border-stone-300'
                 : justAdded
                 ? 'bg-emerald-600 text-white shadow-emerald-600/30 shadow-md scale-95'
-                : 'bg-stone-900 text-white hover:bg-orange-600 hover:shadow-md hover:shadow-orange-600/20 active:scale-95'
+                : 'bg-stone-900 text-white hover:bg-primary hover:shadow-md hover:shadow-primary/20 active:scale-95'
             }`}
             aria-label={isAvailable ? `Agregar ${product.nombre} al pedido` : `${product.nombre} agotado`}
           >

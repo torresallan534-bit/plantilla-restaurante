@@ -16,7 +16,8 @@ import {
   getProducts,
 } from '@/lib/payloadClient'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function HomePage() {
   const [
@@ -38,7 +39,7 @@ export default async function HomePage() {
   ])
 
   return (
-    <main className="min-h-screen flex flex-col bg-brand-warm-bg text-brand-dark selection:bg-orange-100 selection:text-orange-900">
+    <main className="min-h-screen flex flex-col bg-theme-bg text-theme-text selection:bg-primary/20 selection:text-primary">
       {/* 1. Navbar con logo y datos dinámicos */}
       <Navbar theme={theme} salesShipping={salesShipping} />
 

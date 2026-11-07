@@ -31,8 +31,8 @@ export default function Navbar({ theme, salesShipping }: NavbarProps) {
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-stone-200/50 py-3.5'
-          : 'bg-white/80 backdrop-blur-sm py-5'
+          ? 'bg-theme-surface/95 backdrop-blur-md shadow-sm border-b border-stone-200/50 py-3.5'
+          : 'bg-theme-surface/80 backdrop-blur-sm py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,25 +54,25 @@ export default function Navbar({ theme, salesShipping }: NavbarProps) {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-stone-700">
             <Link
               href="#inicio"
-              className="hover:text-orange-600 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-600 hover:after:w-full after:transition-all"
+              className="hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary hover:after:w-full after:transition-all"
             >
               Inicio
             </Link>
             <Link
               href="#menu"
-              className="hover:text-orange-600 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-600 hover:after:w-full after:transition-all"
+              className="hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary hover:after:w-full after:transition-all"
             >
               Menú
             </Link>
             <Link
               href="#conocenos"
-              className="hover:text-orange-600 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-600 hover:after:w-full after:transition-all"
+              className="hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary hover:after:w-full after:transition-all"
             >
               Conócenos
             </Link>
             <Link
               href="#horarios"
-              className="hover:text-orange-600 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-600 hover:after:w-full after:transition-all"
+              className="hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary hover:after:w-full after:transition-all"
             >
               Horarios & Ubicación
             </Link>
@@ -83,13 +83,13 @@ export default function Navbar({ theme, salesShipping }: NavbarProps) {
             {/* Botón Carrito con Contador */}
             <button
               onClick={openCart}
-              className="relative flex items-center gap-2 rounded-2xl bg-stone-100 hover:bg-orange-50 px-3.5 py-2.5 text-sm font-semibold text-stone-800 transition border border-stone-200/80 group"
+              className="relative flex items-center gap-2 rounded-2xl bg-stone-100 hover:bg-primary/10 px-3.5 py-2.5 text-sm font-semibold text-theme-text transition border border-stone-200/80 group"
               aria-label="Abrir carrito"
             >
-              <ShoppingBag className="h-5 w-5 text-stone-700 group-hover:text-orange-600 transition-colors" />
+              <ShoppingBag className="h-5 w-5 text-stone-700 group-hover:text-primary transition-colors" />
               <span className="hidden sm:inline font-sans text-xs">Pedido</span>
               {totalItems > 0 && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-600 text-[11px] font-bold text-white animate-fade-in shadow-sm">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white animate-fade-in shadow-sm">
                   {totalItems}
                 </span>
               )}
@@ -119,32 +119,32 @@ export default function Navbar({ theme, salesShipping }: NavbarProps) {
 
         {/* Menú Mobile Desplegable */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-4 pt-4 border-t border-stone-100 bg-white/95 rounded-2xl p-4 shadow-xl space-y-3 animate-fade-in">
+          <div className="md:hidden mt-4 pt-4 border-t border-stone-100 bg-theme-surface/95 rounded-2xl p-4 shadow-xl space-y-3 animate-fade-in">
             <Link
               href="#inicio"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-semibold text-stone-800 hover:bg-orange-50 rounded-lg"
+              className="block px-3 py-2 text-sm font-semibold text-theme-text hover:bg-primary/10 hover:text-primary rounded-lg transition"
             >
               Inicio
             </Link>
             <Link
               href="#menu"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-semibold text-stone-800 hover:bg-orange-50 rounded-lg"
+              className="block px-3 py-2 text-sm font-semibold text-theme-text hover:bg-primary/10 hover:text-primary rounded-lg transition"
             >
               Menú
             </Link>
             <Link
               href="#conocenos"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-semibold text-stone-800 hover:bg-orange-50 rounded-lg"
+              className="block px-3 py-2 text-sm font-semibold text-theme-text hover:bg-primary/10 hover:text-primary rounded-lg transition"
             >
               Conócenos
             </Link>
             <Link
               href="#horarios"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-semibold text-stone-800 hover:bg-orange-50 rounded-lg"
+              className="block px-3 py-2 text-sm font-semibold text-theme-text hover:bg-primary/10 hover:text-primary rounded-lg transition"
             >
               Horarios & Ubicación
             </Link>

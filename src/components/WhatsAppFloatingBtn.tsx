@@ -30,7 +30,7 @@ export default function WhatsAppFloatingBtn({ whatsappNumber }: WhatsAppFloating
                 {lastAddedProduct.nombre}
               </p>
             </div>
-            <div className="ml-2 pl-2 border-l border-stone-700 flex items-center text-orange-400 text-xs font-bold gap-1">
+            <div className="ml-2 pl-2 border-l border-stone-700 flex items-center text-secondary text-xs font-bold gap-1">
               <ShoppingBag className="h-3.5 w-3.5" />
               <span>Ver</span>
             </div>

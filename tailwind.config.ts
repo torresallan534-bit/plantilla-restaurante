@@ -9,29 +9,40 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          primary: 'var(--color-primary, #C2410C)',
-          'primary-hover': 'var(--color-primary-hover, #9A3412)',
-          'primary-light': 'var(--color-primary-light, #FFEDD5)',
-          secondary: 'var(--color-secondary, #D97706)',
-          accent: 'var(--color-secondary, #D97706)',
-          'accent-hover': 'var(--color-accent-hover, #B45309)',
-          'accent-light': 'var(--color-accent-light, #FEF3C7)',
-          surface: 'var(--color-surface, #FFFFFF)',
-          'warm-bg': 'var(--color-bg-warm, #FAF8F5)',
-          dark: 'var(--color-text-main, #1C1917)',
-          'dark-muted': 'var(--color-text-muted, #78716C)',
-          border: 'var(--color-border, #E7E5E4)',
+        // Clases semánticas dinámicas conectadas al Global de Payload CMS
+        primary: {
+          DEFAULT: 'rgb(var(--color-primary-rgb, 194 65 12) / <alpha-value>)',
+          hover: 'rgb(var(--color-primary-rgb, 194 65 12) / 0.9)',
+          light: 'rgb(var(--color-primary-rgb, 194 65 12) / 0.1)',
         },
-      },
-      fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        secondary: {
+          DEFAULT: 'rgb(var(--color-secondary-rgb, 217 119 6) / <alpha-value>)',
+          hover: 'rgb(var(--color-secondary-rgb, 217 119 6) / 0.9)',
+          light: 'rgb(var(--color-secondary-rgb, 217 119 6) / 0.1)',
+        },
+        'theme-bg': 'rgb(var(--color-bg-warm-rgb, 250 248 245) / <alpha-value>)',
+        'theme-surface': 'rgb(var(--color-surface-rgb, 255 255 255) / <alpha-value>)',
+        'theme-text': 'rgb(var(--color-text-main-rgb, 28 25 23) / <alpha-value>)',
+
+        // Alias retrocompatibles
+        brand: {
+          primary: 'rgb(var(--color-primary-rgb, 194 65 12) / <alpha-value>)',
+          secondary: 'rgb(var(--color-secondary-rgb, 217 119 6) / <alpha-value>)',
+          surface: 'rgb(var(--color-surface-rgb, 255 255 255) / <alpha-value>)',
+          'warm-bg': 'rgb(var(--color-bg-warm-rgb, 250 248 245) / <alpha-value>)',
+          dark: 'rgb(var(--color-text-main-rgb, 28 25 23) / <alpha-value>)',
+        },
       },
       boxShadow: {
         soft: '0 4px 20px -2px rgba(28, 25, 23, 0.05)',
         card: '0 10px 30px -4px rgba(28, 25, 23, 0.08)',
         hover: '0 20px 40px -6px rgba(28, 25, 23, 0.12)',
+        'primary/20': '0 10px 25px -5px rgb(var(--color-primary-rgb, 194 65 12) / 0.2)',
+        'primary/25': '0 10px 25px -5px rgb(var(--color-primary-rgb, 194 65 12) / 0.25)',
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
       },
       borderRadius: {
         '4xl': '2rem',
