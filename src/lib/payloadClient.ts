@@ -33,11 +33,11 @@ export async function getThemeBranding(): Promise<ThemeBranding> {
   if (!payload) return mockThemeBranding
 
   try {
-    const data = await payload.findGlobal({ slug: 'theme-branding' })
+    const data = await payload.findGlobal({ slug: 'theme-branding', depth: 1 })
     if (!data) return mockThemeBranding
 
-    let logoUrl = data.logoUrl || mockThemeBranding.logoUrl
-    if (data.logo && typeof data.logo === 'object' && 'url' in data.logo) {
+    let logoUrl = mockThemeBranding.logoUrl
+    if (data.logo && typeof data.logo === 'object' && 'url' in data.logo && data.logo.url) {
       logoUrl = data.logo.url as string
     }
 
@@ -87,11 +87,11 @@ export async function getHeroContent(): Promise<HeroContentData> {
   if (!payload) return mockHeroContent
 
   try {
-    const data = await payload.findGlobal({ slug: 'hero-content' })
+    const data = await payload.findGlobal({ slug: 'hero-content', depth: 1 })
     if (!data) return mockHeroContent
 
-    let imagenFondoUrl = data.imagenFondoUrl || mockHeroContent.imagenFondoUrl
-    if (data.imagenFondo && typeof data.imagenFondo === 'object' && 'url' in data.imagenFondo) {
+    let imagenFondoUrl = mockHeroContent.imagenFondoUrl
+    if (data.imagenFondo && typeof data.imagenFondo === 'object' && 'url' in data.imagenFondo && data.imagenFondo.url) {
       imagenFondoUrl = data.imagenFondo.url as string
     }
 
@@ -136,8 +136,22 @@ export async function getAboutUsContent(): Promise<AboutUsContentData> {
   if (!payload) return mockAboutUsContent
 
   try {
-    const data = await payload.findGlobal({ slug: 'about-us-content' })
+    const data = await payload.findGlobal({ slug: 'about-us-content', depth: 1 })
     if (!data) return mockAboutUsContent
+
+    let imagen1Url = mockAboutUsContent.imagen1Url
+    let imagen2Url = mockAboutUsContent.imagen2Url
+    let imagen3Url = mockAboutUsContent.imagen3Url
+
+    if (data.imagen1 && typeof data.imagen1 === 'object' && 'url' in data.imagen1 && data.imagen1.url) {
+      imagen1Url = data.imagen1.url as string
+    }
+    if (data.imagen2 && typeof data.imagen2 === 'object' && 'url' in data.imagen2 && data.imagen2.url) {
+      imagen2Url = data.imagen2.url as string
+    }
+    if (data.imagen3 && typeof data.imagen3 === 'object' && 'url' in data.imagen3 && data.imagen3.url) {
+      imagen3Url = data.imagen3.url as string
+    }
 
     return {
       badge: data.badge || mockAboutUsContent.badge,
@@ -146,9 +160,9 @@ export async function getAboutUsContent(): Promise<AboutUsContentData> {
       parrafo2: data.parrafo2 || mockAboutUsContent.parrafo2,
       stats:
         data.stats && data.stats.length > 0 ? (data.stats as any) : mockAboutUsContent.stats,
-      imagen1Url: data.imagen1Url || mockAboutUsContent.imagen1Url,
-      imagen2Url: data.imagen2Url || mockAboutUsContent.imagen2Url,
-      imagen3Url: data.imagen3Url || mockAboutUsContent.imagen3Url,
+      imagen1Url,
+      imagen2Url,
+      imagen3Url,
     }
   } catch (e) {
     return mockAboutUsContent
@@ -194,9 +208,9 @@ export async function getProducts(): Promise<Product[]> {
     if (!result.docs || result.docs.length === 0) return mockProducts
 
     return result.docs.map((doc: any) => {
-      let imageSrc = doc.imagenUrl || '/images/arepas-1.jpg'
-      if (doc.imagen && typeof doc.imagen === 'object' && doc.imagen.url) {
-        imageSrc = doc.imagen.url
+      let imageSrc = '/images/arepas-1.jpg'
+      if (doc.imagen && typeof doc.imagen === 'object' && 'url' in doc.imagen && doc.imagen.url) {
+        imageSrc = doc.imagen.url as string
       }
 
       const catSlug =

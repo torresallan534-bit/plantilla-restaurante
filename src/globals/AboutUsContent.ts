@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff } from '../access/roles'
 
 export const AboutUsContent: GlobalConfig = {
   slug: 'about-us-content',
@@ -9,7 +9,7 @@ export const AboutUsContent: GlobalConfig = {
   },
   access: {
     read: anyoneCanRead,
-    update: isAdminOrSuperAdmin,
+    update: isStaff, // SuperAdmin y Admin
   },
   fields: [
     {
@@ -64,22 +64,22 @@ export const AboutUsContent: GlobalConfig = {
       ],
     },
     {
-      name: 'imagen1Url',
-      type: 'text',
-      label: 'URL de Imagen Principal Bento',
-      defaultValue: '/images/arepas-1.jpg',
+      name: 'imagen1',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Imagen Principal Bento (Subir Archivo a Media)',
     },
     {
-      name: 'imagen2Url',
-      type: 'text',
-      label: 'URL de Imagen Secundaria Bento',
-      defaultValue: '/images/arepas-2.jpg',
+      name: 'imagen2',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Imagen Secundaria Bento (Subir Archivo a Media)',
     },
     {
-      name: 'imagen3Url',
-      type: 'text',
-      label: 'URL de Imagen Detalle Bento',
-      defaultValue: '/images/arepas-3.jpg',
+      name: 'imagen3',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Imagen de Detalle Bento (Subir Archivo a Media)',
     },
   ],
 }

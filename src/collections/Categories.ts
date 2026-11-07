@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff, hasAdminPanelAccess } from '../access/roles'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -13,9 +13,10 @@ export const Categories: CollectionConfig = {
   },
   access: {
     read: anyoneCanRead,
-    create: isAdminOrSuperAdmin,
-    update: isAdminOrSuperAdmin,
-    delete: isAdminOrSuperAdmin,
+    create: isStaff, // SuperAdmin y Admin
+    update: isStaff, // SuperAdmin y Admin
+    delete: isStaff, // SuperAdmin y Admin
+    admin: hasAdminPanelAccess,
   },
   fields: [
     {
@@ -24,7 +25,7 @@ export const Categories: CollectionConfig = {
       label: 'Nombre de la Categoría',
       required: true,
       admin: {
-        placeholder: 'Ej. Platos Fuertes, Especialidades, Bebidas',
+        placeholder: 'Ej. Platos Fuertes, Arepas Especiales, Bebidas',
       },
     },
     {
@@ -34,7 +35,7 @@ export const Categories: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        placeholder: 'ej. platos-fuertes, bebidas',
+        placeholder: 'ej. arepas-especiales, bebidas',
         description: 'Texto identificador en minúsculas y sin espacios.',
       },
     },

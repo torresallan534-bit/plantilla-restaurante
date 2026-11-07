@@ -6,11 +6,12 @@ export const ThemeBranding: GlobalConfig = {
   label: 'Branding y Tema (SuperAdmin)',
   admin: {
     group: 'Control Maestro',
+    // Oculto completamente del menú si el usuario NO es superadmin
     hidden: ({ user }) => user?.role !== 'superadmin',
   },
   access: {
-    read: anyoneCanRead,
-    update: isSuperAdmin,
+    read: anyoneCanRead, // Lectura pública para inyectar CSS variables en Next.js
+    update: isSuperAdmin, // Solo SuperAdmin puede modificar colores o marca
   },
   fields: [
     {
@@ -21,7 +22,7 @@ export const ThemeBranding: GlobalConfig = {
       defaultValue: '#C2410C',
       admin: {
         placeholder: '#C2410C',
-        description: 'Color primario de la marca (botones principales, acentos destacados).',
+        description: 'Color primario de la marca (botones de compra, navegación, acentos).',
       },
     },
     {
@@ -32,7 +33,7 @@ export const ThemeBranding: GlobalConfig = {
       defaultValue: '#D97706',
       admin: {
         placeholder: '#D97706',
-        description: 'Color secundario (insignias, estrellas, detalles de contraste).',
+        description: 'Color secundario (insignias, calificaciones, badges dorados).',
       },
     },
     {
@@ -43,13 +44,13 @@ export const ThemeBranding: GlobalConfig = {
       defaultValue: '#FAF8F5',
       admin: {
         placeholder: '#FAF8F5',
-        description: 'Fondo de la página (recomendado tono crema suave o neutro).',
+        description: 'Color de fondo general de la página web (ej. crema cálido o blanco).',
       },
     },
     {
       name: 'surfaceColor',
       type: 'text',
-      label: 'Color de Tarjetas y Superficies (Hex)',
+      label: 'Color de Superficie / Cards (Hex)',
       required: true,
       defaultValue: '#FFFFFF',
       admin: {
@@ -70,15 +71,10 @@ export const ThemeBranding: GlobalConfig = {
       name: 'logo',
       type: 'upload',
       relationTo: 'media',
-      label: 'Logo Oficial (Subir archivo)',
-    },
-    {
-      name: 'logoUrl',
-      type: 'text',
-      label: 'Ruta o URL del Logo (Fallback)',
-      defaultValue: '/logo/logo.svg',
+      label: 'Logo Oficial (Subir Archivo a Media)',
+      required: false,
       admin: {
-        description: 'Ruta local estática o URL del logo.',
+        description: 'Sube tu archivo de logo (.svg, .webp o .png) usando el botón nativo de carga.',
       },
     },
   ],

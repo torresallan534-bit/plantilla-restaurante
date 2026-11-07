@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff, hasAdminPanelAccess } from '../access/roles'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -13,9 +13,10 @@ export const Products: CollectionConfig = {
   },
   access: {
     read: anyoneCanRead,
-    create: isAdminOrSuperAdmin,
-    update: isAdminOrSuperAdmin,
-    delete: isAdminOrSuperAdmin,
+    create: isStaff, // SuperAdmin absoluto y Admin de la tienda
+    update: isStaff, // SuperAdmin absoluto y Admin de la tienda
+    delete: isStaff, // SuperAdmin absoluto y Admin de la tienda
+    admin: hasAdminPanelAccess,
   },
   fields: [
     {
@@ -24,7 +25,7 @@ export const Products: CollectionConfig = {
       label: 'Nombre del Plato o Bebida',
       required: true,
       admin: {
-        placeholder: 'Ej. Arepa Reina Pepiada Suprema',
+        placeholder: 'Ej. Arepa Paisa Suprema con Chicharrón',
       },
     },
     {
@@ -34,7 +35,7 @@ export const Products: CollectionConfig = {
       required: true,
       min: 0,
       admin: {
-        placeholder: 'Ej. 18000',
+        placeholder: 'Ej. 22000',
         description: 'Valor del producto en moneda local (ej. COP o USD).',
       },
     },
@@ -46,6 +47,24 @@ export const Products: CollectionConfig = {
       admin: {
         placeholder: 'Describe los ingredientes frescos y preparación artesanal...',
       },
+    },
+    {
+      name: 'imagen',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Fotografía del Producto (Subir Archivo a Media)',
+      required: false,
+      admin: {
+        description: 'Sube la foto del plato directamente a la biblioteca multimedia.',
+      },
+    },
+    {
+      name: 'categoria',
+      type: 'relationship',
+      relationTo: 'categories',
+      label: 'Categoría del Menú',
+      required: true,
+      hasMany: false,
     },
     {
       name: 'disponible',
@@ -64,29 +83,6 @@ export const Products: CollectionConfig = {
       admin: {
         description: 'Muestra una insignia dorada "Favorito" en el menú.',
       },
-    },
-    {
-      name: 'imagen',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Fotografía del Producto (Subir archivo)',
-      required: false,
-    },
-    {
-      name: 'imagenUrl',
-      type: 'text',
-      label: 'Ruta o URL de Imagen (Fallback)',
-      admin: {
-        description: 'Ruta local como /images/arepas-1.jpg o URL externa.',
-      },
-    },
-    {
-      name: 'categoria',
-      type: 'relationship',
-      relationTo: 'categories',
-      label: 'Categoría del Menú',
-      required: true,
-      hasMany: false,
     },
   ],
 }

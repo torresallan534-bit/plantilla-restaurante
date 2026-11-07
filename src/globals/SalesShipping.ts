@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff } from '../access/roles'
 
 export const SalesShipping: GlobalConfig = {
   slug: 'sales-shipping',
@@ -9,7 +9,7 @@ export const SalesShipping: GlobalConfig = {
   },
   access: {
     read: anyoneCanRead,
-    update: isAdminOrSuperAdmin,
+    update: isStaff, // SuperAdmin y Admin pueden editar precios de envío y WhatsApp
   },
   fields: [
     {

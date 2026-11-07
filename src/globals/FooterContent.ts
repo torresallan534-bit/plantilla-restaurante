@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff } from '../access/roles'
 
 export const FooterContent: GlobalConfig = {
   slug: 'footer-content',
@@ -9,7 +9,7 @@ export const FooterContent: GlobalConfig = {
   },
   access: {
     read: anyoneCanRead,
-    update: isAdminOrSuperAdmin,
+    update: isStaff, // SuperAdmin y Admin pueden editar SEO y redes
   },
   fields: [
     {
@@ -24,7 +24,8 @@ export const FooterContent: GlobalConfig = {
       type: 'textarea',
       label: 'Descripción SEO / Párrafo del Footer',
       required: true,
-      defaultValue: 'Auténtico maíz peto procesado artesanalmente día a día. Rellenos generosos y el mejor toque ahumado al carbón.',
+      defaultValue:
+        'Auténtico maíz peto procesado artesanalmente día a día. Rellenos generosos y el mejor toque ahumado al carbón.',
     },
     {
       name: 'creditos',

@@ -1,8 +1,16 @@
 import type { CollectionConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff, hasAdminPanelAccess } from '../access/roles'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Imagen / Archivo Multimedia',
+    plural: 'Biblioteca Multimedia',
+  },
+  admin: {
+    useAsTitle: 'alt',
+    defaultColumns: ['filename', 'alt', 'filesize', 'createdAt'],
+  },
   upload: {
     staticDir: 'public/media',
     mimeTypes: ['image/*'],
@@ -30,16 +38,20 @@ export const Media: CollectionConfig = {
   },
   access: {
     read: anyoneCanRead,
-    create: isAdminOrSuperAdmin,
-    update: isAdminOrSuperAdmin,
-    delete: isAdminOrSuperAdmin,
+    create: isStaff, // SuperAdmin y Admin pueden subir archivos multimedia
+    update: isStaff, // SuperAdmin y Admin pueden actualizar archivos
+    delete: isStaff, // SuperAdmin y Admin pueden eliminar archivos
+    admin: hasAdminPanelAccess,
   },
   fields: [
     {
       name: 'alt',
       type: 'text',
-      label: 'Texto Alternativo (SEO y Accesibilidad)',
-      required: true,
+      label: 'Texto Alternativo (Descripción para SEO y Accesibilidad)',
+      required: false,
+      admin: {
+        placeholder: 'Ej. Arepa Paisa Suprema con chicharrón crocante',
+      },
     },
   ],
 }

@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isAdminOrSuperAdmin } from '../access/roles'
+import { anyoneCanRead, isStaff } from '../access/roles'
 
 export const HeroContent: GlobalConfig = {
   slug: 'hero-content',
@@ -9,7 +9,7 @@ export const HeroContent: GlobalConfig = {
   },
   access: {
     read: anyoneCanRead,
-    update: isAdminOrSuperAdmin,
+    update: isStaff, // SuperAdmin y Admin pueden editar el contenido de Hero
   },
   fields: [
     {
@@ -30,7 +30,8 @@ export const HeroContent: GlobalConfig = {
       name: 'descripcion',
       type: 'textarea',
       label: 'Párrafo Descriptivo',
-      defaultValue: 'Masa de maíz peto recién molido, dorada al carbón de leña y rellena con carnes ahumadas lentamente y quesos frescos. Haz tu pedido y recíbelo caliente en tu puerta.',
+      defaultValue:
+        'Masa de maíz peto recién molido, dorada al carbón de leña y rellena con carnes ahumadas lentamente y quesos frescos. Haz tu pedido y recíbelo caliente en tu puerta.',
     },
     {
       name: 'badge',
@@ -49,13 +50,11 @@ export const HeroContent: GlobalConfig = {
       name: 'imagenFondo',
       type: 'upload',
       relationTo: 'media',
-      label: 'Imagen Principal de Impacto (Subir archivo)',
-    },
-    {
-      name: 'imagenFondoUrl',
-      type: 'text',
-      label: 'URL o Ruta de Imagen (Fallback)',
-      defaultValue: '/images/arepas-1.jpg',
+      label: 'Imagen Principal de Impacto (Subir Archivo a Media)',
+      required: false,
+      admin: {
+        description: 'Sube la imagen destacada que se mostrará en la cabecera principal.',
+      },
     },
     {
       name: 'ratingText',

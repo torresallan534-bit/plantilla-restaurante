@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isSuperAdmin, isAdminOrSuperAdmin } from '../access/roles'
+import { isSuperAdmin, isStaff, hasAdminPanelAccess } from '../access/roles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -8,18 +8,42 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
     defaultColumns: ['name', 'email', 'role'],
   },
+  hooks: {
+    beforeChange: [
+      async ({ operation, data, req }) => {
+        // Garantizar que el primer usuario registrado en la base de datos sea siempre SUPERADMIN
+        if (operation === 'create') {
+          try {
+            const count = await req.payload.count({ collection: 'users' })
+            if (count.totalDocs === 0) {
+              data.role = 'superadmin'
+            }
+          } catch (e) {
+            data.role = 'superadmin'
+          }
+        }
+        return data
+      },
+    ],
+  },
   access: {
-    create: isSuperAdmin,
-    read: isAdminOrSuperAdmin,
+    // Si no hay usuarios aún (pantalla de bienvenida), se permite la creación del primer SuperAdmin
+    create: async ({ req }) => {
+      if (req.user?.role === 'superadmin') return true
+      try {
+        const count = await req.payload.count({ collection: 'users' })
+        return count.totalDocs === 0
+      } catch (e) {
+        return true
+      }
+    },
+    read: isStaff,
     update: ({ req: { user }, id }) => {
       if (user?.role === 'superadmin') return true
       return user?.id === id
     },
-    delete: isSuperAdmin,
-    admin: ({ req: { user } }) => {
-      if (!user) return false
-      return user.role === 'superadmin' || user.role === 'admin'
-    },
+    delete: isSuperAdmin, // Solo SuperAdmin puede eliminar usuarios
+    admin: hasAdminPanelAccess,
   },
   fields: [
     {
@@ -33,14 +57,14 @@ export const Users: CollectionConfig = {
       type: 'select',
       label: 'Rol de Usuario',
       required: true,
-      defaultValue: 'admin',
+      defaultValue: 'superadmin',
       options: [
         {
-          label: 'Super Admin (Control Total)',
+          label: 'Super Admin (Control Absoluto del Sistema)',
           value: 'superadmin',
         },
         {
-          label: 'Admin (Gestión de Menú y Contenido)',
+          label: 'Admin (Cliente / Gestión de Menú y Contenido)',
           value: 'admin',
         },
       ],
