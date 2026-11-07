@@ -33,6 +33,9 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/restaurante-template',
+    connectOptions: {
+      serverSelectionTimeoutMS: 7000,
+    },
   }),
   sharp,
 })
