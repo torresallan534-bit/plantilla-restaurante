@@ -31,6 +31,9 @@ export interface HeroContentData {
   textoCTA: string
   imagenFondoUrl: string
   ratingText: string
+  platoInsigniaEtiqueta?: string
+  platoInsigniaTitulo?: string
+  tiempoDespachoTexto?: string
 }
 
 export interface SocialNetwork {

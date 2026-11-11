@@ -103,6 +103,9 @@ export async function getHeroContent(): Promise<HeroContentData> {
       textoCTA: data.textoCTA || mockHeroContent.textoCTA,
       imagenFondoUrl,
       ratingText: data.ratingText || mockHeroContent.ratingText,
+      platoInsigniaEtiqueta: (data.platoInsigniaEtiqueta as string) || mockHeroContent.platoInsigniaEtiqueta,
+      platoInsigniaTitulo: (data.platoInsigniaTitulo as string) || mockHeroContent.platoInsigniaTitulo,
+      tiempoDespachoTexto: (data.tiempoDespachoTexto as string) || mockHeroContent.tiempoDespachoTexto,
     }
   } catch (e) {
     return mockHeroContent

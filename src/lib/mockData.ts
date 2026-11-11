@@ -39,6 +39,9 @@ export const mockHeroContent: HeroContentData = {
   textoCTA: 'Ver Nuestro Menú',
   imagenFondoUrl: '/images/arepas-1.jpg',
   ratingText: '4.9 / 5 (más de 1.200 clientes felices)',
+  platoInsigniaEtiqueta: 'Plato Insignia',
+  platoInsigniaTitulo: 'Arepa Paisa Suprema al Carbón',
+  tiempoDespachoTexto: 'Despacho en 35-45 min',
 }
 
 export const mockFooterContent: FooterContentData = {

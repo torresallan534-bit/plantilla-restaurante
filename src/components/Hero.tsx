@@ -97,7 +97,7 @@ export default function Hero({ hero }: HeroProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               </div>
 
-              {/* Tarjeta Flotante 1: Recomendado */}
+              {/* Tarjeta Flotante 1: Recomendado / Plato Insignia */}
               <div className="absolute -bottom-6 -left-4 sm:-left-6 rounded-2xl bg-theme-surface p-4 shadow-xl border border-stone-100/80 max-w-[220px] animate-fade-in backdrop-blur-md">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
@@ -105,10 +105,10 @@ export default function Hero({ hero }: HeroProps) {
                   </div>
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                      Plato Insignia
+                      {hero.platoInsigniaEtiqueta || 'Plato Insignia'}
                     </p>
                     <p className="font-serif font-bold text-xs text-theme-text leading-tight">
-                      Arepa Paisa Suprema al Carbón
+                      {hero.platoInsigniaTitulo || 'Arepa Paisa Suprema al Carbón'}
                     </p>
                   </div>
                 </div>
@@ -118,7 +118,9 @@ export default function Hero({ hero }: HeroProps) {
               <div className="absolute -top-4 -right-4 sm:-right-6 rounded-2xl bg-stone-900/90 text-white p-3.5 shadow-xl border border-stone-800 max-w-[190px] backdrop-blur-md">
                 <div className="flex items-center gap-2.5">
                   <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
-                  <p className="text-xs font-semibold">Despacho en 35-45 min</p>
+                  <p className="text-xs font-semibold">
+                    {hero.tiempoDespachoTexto || 'Despacho en 35-45 min'}
+                  </p>
                 </div>
               </div>
             </div>

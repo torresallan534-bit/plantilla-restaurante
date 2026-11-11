@@ -20,6 +20,7 @@ export const isSuperAdmin: Access = ({ req: { user } }) => {
 export const isStaff: Access = ({ req: { user } }) => {
   if (user?.role === 'superadmin') return true
   if (user?.role === 'admin') return true
+  if (Boolean(user)) return true // Permite a cualquier usuario autenticado en el CMS editar contenido operativo
   return false
 }
 

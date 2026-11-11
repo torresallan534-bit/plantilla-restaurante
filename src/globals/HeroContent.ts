@@ -9,7 +9,7 @@ export const HeroContent: GlobalConfig = {
   },
   access: {
     read: anyoneCanRead,
-    update: isStaff, // SuperAdmin y Admin pueden editar el contenido de Hero
+    update: isStaff, // SuperAdmin y Admin (cualquier usuario) pueden editar el contenido de Hero
   },
   fields: [
     {
@@ -61,6 +61,36 @@ export const HeroContent: GlobalConfig = {
       type: 'text',
       label: 'Texto de Calificación / Social Proof',
       defaultValue: '4.9 / 5 (más de 1.200 clientes felices)',
+    },
+    {
+      name: 'platoInsigniaEtiqueta',
+      type: 'text',
+      label: 'Etiqueta Tarjeta Flotante (ej. Plato Insignia)',
+      defaultValue: 'Plato Insignia',
+      admin: {
+        description: 'Texto pequeño en mayúsculas de la tarjeta flotante inferior del Hero.',
+        placeholder: 'Plato Insignia',
+      },
+    },
+    {
+      name: 'platoInsigniaTitulo',
+      type: 'text',
+      label: 'Nombre del Plato Insignia',
+      defaultValue: 'Arepa Paisa Suprema al Carbón',
+      admin: {
+        description: 'Nombre del plato insignia que se muestra en la tarjeta flotante del Hero.',
+        placeholder: 'Arepa Paisa Suprema al Carbón',
+      },
+    },
+    {
+      name: 'tiempoDespachoTexto',
+      type: 'text',
+      label: 'Texto de Despacho (Tarjeta Flotante Superior)',
+      defaultValue: 'Despacho en 35-45 min',
+      admin: {
+        description: 'Texto mostrado en la tarjeta flotante superior derecha con punto verde.',
+        placeholder: 'Despacho en 35-45 min',
+      },
     },
   ],
 }
