@@ -14,6 +14,11 @@ export interface ScheduleItem {
   horas: string
 }
 
+export interface PaymentMethodItem {
+  id?: string
+  nombre: string
+}
+
 export interface SalesShipping {
   nombreRestaurante: string
   numeroWhatsApp: string
@@ -21,6 +26,10 @@ export interface SalesShipping {
   costoDomicilio: number
   direccionFisica: string
   horarios: ScheduleItem[]
+  tituloFormularioCheckout?: string
+  habilitarMetodosPago?: boolean
+  metodosPago?: PaymentMethodItem[]
+  pieDePaginaCheckout?: string
 }
 
 export interface HeroContentData {
@@ -74,6 +83,19 @@ export interface Category {
   orden: number
 }
 
+export interface ProductOptionChoice {
+  id?: string
+  nombre: string
+  precioExtra?: number
+}
+
+export interface ProductOptionGroup {
+  id?: string
+  titulo: string
+  requerido?: boolean
+  opciones: ProductOptionChoice[]
+}
+
 export interface Product {
   id: string
   nombre: string
@@ -83,16 +105,20 @@ export interface Product {
   categoria: Category | string
   disponible: boolean
   destacado?: boolean
+  gruposOpciones?: ProductOptionGroup[]
 }
 
 export interface CartItem {
+  cartItemId: string
   product: Product
   quantity: number
+  selectedOptions?: Record<string, string>
   notes?: string
 }
 
 export interface CheckoutFormData {
   nombre: string
   direccion: string
+  metodoPago?: string
   notas?: string
 }

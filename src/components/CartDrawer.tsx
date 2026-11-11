@@ -14,8 +14,9 @@ import {
   FileText,
   ArrowRight,
   Truck,
+  CreditCard,
 } from 'lucide-react'
-import { useCart } from '../context/CartContext'
+import { useCart, getItemUnitPrice } from '../context/CartContext'
 import { SalesShipping } from '../types'
 
 interface CartDrawerProps {
@@ -33,8 +34,19 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     totalItems,
   } = useCart()
 
+  const defaultPaymentMethods = [
+    'Efectivo contra entrega',
+    'Transferencia Nequi / Daviplata',
+    'Datáfono / Tarjeta a domicilio',
+  ]
+  const paymentMethods =
+    salesShipping.metodosPago && salesShipping.metodosPago.length > 0
+      ? salesShipping.metodosPago.map((m) => m.nombre)
+      : defaultPaymentMethods
+
   const [nombreCliente, setNombreCliente] = useState('')
   const [direccion, setDireccion] = useState('')
+  const [metodoPago, setMetodoPago] = useState<string>(paymentMethods[0] || 'Efectivo contra entrega')
   const [notas, setNotas] = useState('')
   const [errors, setErrors] = useState<{ nombre?: string; direccion?: string }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -49,8 +61,11 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     }).format(amount)
   }
 
-  // Cálculos de Subtotal, Costo de Domicilio (dinámico desde Payload) y Total
-  const subtotal = items.reduce((sum, item) => sum + item.quantity * item.product.precio, 0)
+  // Cálculos de Subtotal dinámico con adicionales de opciones
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.quantity * getItemUnitPrice(item),
+    0
+  )
   const costoDomicilio = salesShipping.costoDomicilio ?? 5000
   const total = subtotal + (items.length > 0 ? costoDomicilio : 0)
 
@@ -77,23 +92,36 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     const restaurante = salesShipping.nombreRestaurante || 'Panda Arepas & Grill'
     const cleanPhone = (salesShipping.numeroWhatsApp || '573001234567').replace(/\D/g, '')
 
-    // Formatear líneas de productos con estructura exacta:
-    // [Cant]x [Producto] - $[Precio]
+    // Formatear líneas de productos con opciones/sabores seleccionados:
+    // [Cant]x [Producto] (Opciones) - $[Precio]
     const productLines = items
-      .map(
-        (item) =>
-          `${item.quantity}x ${item.product.nombre} - ${formatPrice(
-            item.product.precio * item.quantity
-          )}`
-      )
+      .map((item) => {
+        const unitPrice = getItemUnitPrice(item)
+        let optionsText = ''
+        if (item.selectedOptions && Object.keys(item.selectedOptions).length > 0) {
+          const parts = Object.entries(item.selectedOptions).map(
+            ([group, choice]) => `${group}: ${choice}`
+          )
+          optionsText = ` (${parts.join(', ')})`
+        }
+        return `${item.quantity}x ${item.product.nombre}${optionsText} - ${formatPrice(
+          unitPrice * item.quantity
+        )}`
+      })
       .join('\n')
 
-    // Formato exacto requerido:
+    // Estructura completa enviada a WhatsApp
     let message = `Hola ${restaurante}, soy ${nombreCliente.trim()}, para pedir:\n\n${productLines}\n\nSubtotal: ${formatPrice(
       subtotal
     )}\nDomicilio: ${formatPrice(costoDomicilio)}\nTotal a pagar: ${formatPrice(
       total
-    )}\nDirección: ${direccion.trim()}`
+    )}`
+
+    if (salesShipping.habilitarMetodosPago !== false && metodoPago) {
+      message += `\nMétodo de pago: ${metodoPago}`
+    }
+
+    message += `\nDirección: ${direccion.trim()}`
 
     if (notas.trim()) {
       message += `\nNotas: ${notas.trim()}`
@@ -102,8 +130,15 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     const encodedMessage = encodeURIComponent(message)
     const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`
 
-    // Redirigir a WhatsApp
+    // 1. Redirigir a WhatsApp
     window.open(whatsappUrl, '_blank')
+
+    // 2. REQUISITO: Borrar el carrito en la página al enviar el pedido
+    clearCart()
+    closeCart()
+    setNombreCliente('')
+    setDireccion('')
+    setNotas('')
     setIsSubmitting(false)
   }
 
@@ -151,7 +186,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                   El carrito está vacío
                 </h3>
                 <p className="mt-2 text-sm text-stone-500 max-w-xs font-sans">
-                  Agrega tus arepas y platos favoritos de nuestro menú para pedirlos directamente por
+                  Agrega tus arepas, combos y bebidas favoritas de nuestro menú para pedirlos directamente por
                   WhatsApp.
                 </p>
                 <button
@@ -163,66 +198,91 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
               </div>
             ) : (
               <div className="space-y-6">
-                {/* Lista de Productos */}
+                {/* Lista de Productos con Opciones / Sabores */}
                 <div className="divide-y divide-stone-100">
-                  {items.map((item) => (
-                    <div key={item.product.id} className="py-4 flex gap-4 items-center">
-                      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-stone-50">
-                        <Image
-                          src={item.product.imagenUrl || '/images/arepas-1.jpg'}
-                          alt={item.product.nombre}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-serif font-bold text-sm text-theme-text truncate">
-                          {item.product.nombre}
-                        </h4>
-                        <p className="text-xs font-semibold text-primary mt-0.5">
-                          {formatPrice(item.product.precio)} c/u
-                        </p>
-                        <div className="flex items-center gap-3 mt-2">
-                          <div className="inline-flex items-center rounded-lg border border-stone-200 bg-stone-50">
-                            <button
-                              onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                              className="p-1 text-stone-600 hover:text-stone-900 transition"
-                              aria-label="Disminuir cantidad"
-                            >
-                              <Minus className="h-3.5 w-3.5" />
-                            </button>
-                            <span className="w-8 text-center text-xs font-bold text-theme-text">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                              className="p-1 text-stone-600 hover:text-stone-900 transition"
-                              aria-label="Aumentar cantidad"
-                            >
-                              <Plus className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                          <span className="text-xs font-bold text-stone-700">
-                            {formatPrice(item.product.precio * item.quantity)}
-                          </span>
+                  {items.map((item) => {
+                    const itemKey = item.cartItemId || item.product.id
+                    const unitPrice = getItemUnitPrice(item)
+
+                    return (
+                      <div key={itemKey} className="py-4 flex gap-4 items-center">
+                        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-stone-50">
+                          <Image
+                            src={item.product.imagenUrl || '/images/arepas-1.jpg'}
+                            alt={item.product.nombre}
+                            fill
+                            className="object-cover"
+                          />
                         </div>
+
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-serif font-bold text-sm text-theme-text truncate">
+                            {item.product.nombre}
+                          </h4>
+
+                          {/* Variantes y Sabores Seleccionados */}
+                          {item.selectedOptions && Object.keys(item.selectedOptions).length > 0 && (
+                            <div className="mt-1 flex flex-wrap gap-1">
+                              {Object.entries(item.selectedOptions).map(([groupTitle, optionVal]) => (
+                                <span
+                                  key={groupTitle}
+                                  className="inline-flex items-center rounded-md bg-stone-100 px-2 py-0.5 text-[10px] font-medium text-stone-700 border border-stone-200/60"
+                                >
+                                  <span className="text-stone-400 mr-1">{groupTitle}:</span>
+                                  <span className="font-semibold text-primary">{optionVal}</span>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          <p className="text-xs font-semibold text-primary mt-1">
+                            {formatPrice(unitPrice)} c/u
+                          </p>
+
+                          <div className="flex items-center gap-3 mt-2">
+                            <div className="inline-flex items-center rounded-lg border border-stone-200 bg-stone-50">
+                              <button
+                                onClick={() => updateQuantity(itemKey, item.quantity - 1)}
+                                className="p-1 text-stone-600 hover:text-stone-900 transition"
+                                aria-label="Disminuir cantidad"
+                              >
+                                <Minus className="h-3.5 w-3.5" />
+                              </button>
+                              <span className="w-8 text-center text-xs font-bold text-theme-text">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() => updateQuantity(itemKey, item.quantity + 1)}
+                                className="p-1 text-stone-600 hover:text-stone-900 transition"
+                                aria-label="Aumentar cantidad"
+                              >
+                                <Plus className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+
+                            <span className="text-xs font-bold text-stone-700">
+                              {formatPrice(unitPrice * item.quantity)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => removeFromCart(itemKey)}
+                          className="p-2 text-stone-300 hover:text-red-500 transition"
+                          title="Eliminar plato"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
-                      <button
-                        onClick={() => removeFromCart(item.product.id)}
-                        className="p-2 text-stone-300 hover:text-red-500 transition"
-                        title="Eliminar plato"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
 
-                {/* Formulario de Entrega */}
+                {/* Formulario de Entrega 100% Configurable desde Payload CMS */}
                 <form id="checkout-form" onSubmit={handleCheckout} className="space-y-4 pt-2">
                   <div className="rounded-2xl bg-stone-50 p-4 border border-stone-100 space-y-3.5">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                      Datos de Entrega Inmediata
+                      {salesShipping.tituloFormularioCheckout || 'Datos de Entrega Inmediata'}
                     </h4>
 
                     {/* Nombre */}
@@ -281,10 +341,50 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                       )}
                     </div>
 
+                    {/* Método de Pago (Configurable desde Payload) */}
+                    {salesShipping.habilitarMetodosPago !== false && paymentMethods.length > 0 && (
+                      <div>
+                        <label className="block text-xs font-medium text-stone-700 mb-1.5 flex items-center gap-1.5">
+                          <CreditCard className="h-3.5 w-3.5 text-stone-500" />
+                          <span>Método de Pago *</span>
+                        </label>
+                        <div className="space-y-1.5">
+                          {paymentMethods.map((metodo) => {
+                            const isSelected = metodoPago === metodo
+                            return (
+                              <button
+                                key={metodo}
+                                type="button"
+                                onClick={() => setMetodoPago(metodo)}
+                                className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left text-xs font-medium transition ${
+                                  isSelected
+                                    ? 'border-primary bg-primary/10 text-theme-text ring-1 ring-primary'
+                                    : 'border-stone-200 bg-white hover:border-stone-300 text-stone-700'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <div
+                                    className={`flex h-3.5 w-3.5 items-center justify-center rounded-full border transition ${
+                                      isSelected
+                                        ? 'border-primary bg-primary'
+                                        : 'border-stone-300 bg-white'
+                                    }`}
+                                  >
+                                    {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
+                                  </div>
+                                  <span>{metodo}</span>
+                                </div>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Notas */}
                     <div>
                       <label className="block text-xs font-medium text-stone-700 mb-1">
-                        Notas opcionales (salsas, sin cebolla, etc.)
+                        Notas opcionales (salsas aparte, cubiertos, etc.)
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
@@ -294,7 +394,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                           type="text"
                           value={notas}
                           onChange={(e) => setNotas(e.target.value)}
-                          placeholder="Ej. Salsa de ajo aparte, portería"
+                          placeholder="Ej. Salsa de ajo aparte, timbre averiado"
                           className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary"
                         />
                       </div>
@@ -337,8 +437,9 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                 <Send className="h-4 w-4" />
                 {isSubmitting ? 'Enviando a WhatsApp...' : 'Enviar Pedido por WhatsApp'}
               </button>
+
               <p className="text-center text-[11px] text-stone-400 font-sans">
-                Pedido directo sin intermediarios ni cargos de servicio.
+                {salesShipping.pieDePaginaCheckout || 'Pedido directo sin intermediarios ni cargos de servicio.'}
               </p>
             </div>
           )}

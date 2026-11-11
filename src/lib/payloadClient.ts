@@ -76,6 +76,18 @@ export async function getSalesShipping(): Promise<SalesShipping> {
         data.horarios && data.horarios.length > 0
           ? (data.horarios as any)
           : mockSalesShipping.horarios,
+      tituloFormularioCheckout:
+        data.tituloFormularioCheckout || mockSalesShipping.tituloFormularioCheckout,
+      habilitarMetodosPago:
+        typeof data.habilitarMetodosPago === 'boolean'
+          ? data.habilitarMetodosPago
+          : mockSalesShipping.habilitarMetodosPago,
+      metodosPago:
+        Array.isArray(data.metodosPago) && data.metodosPago.length > 0
+          ? (data.metodosPago as any)
+          : mockSalesShipping.metodosPago,
+      pieDePaginaCheckout:
+        data.pieDePaginaCheckout || mockSalesShipping.pieDePaginaCheckout,
     }
   } catch (e) {
     return mockSalesShipping
@@ -223,6 +235,22 @@ export async function getProducts(): Promise<Product[]> {
           ? doc.categoria
           : 'arepas-especiales'
 
+      const gruposOpciones =
+        Array.isArray(doc.gruposOpciones) && doc.gruposOpciones.length > 0
+          ? doc.gruposOpciones.map((g: any) => ({
+              id: g.id,
+              titulo: g.titulo,
+              requerido: g.requerido !== false,
+              opciones: Array.isArray(g.opciones)
+                ? g.opciones.map((o: any) => ({
+                    id: o.id,
+                    nombre: o.nombre,
+                    precioExtra: typeof o.precioExtra === 'number' ? o.precioExtra : 0,
+                  }))
+                : [],
+            }))
+          : undefined
+
       return {
         id: doc.id,
         nombre: doc.nombre,
@@ -232,6 +260,7 @@ export async function getProducts(): Promise<Product[]> {
         categoria: catSlug,
         disponible: doc.disponible ?? true,
         destacado: doc.destacado ?? false,
+        gruposOpciones,
       }
     })
   } catch (e) {

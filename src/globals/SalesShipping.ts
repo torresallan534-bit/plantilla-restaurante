@@ -9,7 +9,7 @@ export const SalesShipping: GlobalConfig = {
   },
   access: {
     read: anyoneCanRead,
-    update: isStaff, // SuperAdmin y Admin pueden editar precios de envío y WhatsApp
+    update: isStaff, // SuperAdmin y Admin pueden editar precios de envío, formulario y WhatsApp
   },
   fields: [
     {
@@ -49,6 +49,51 @@ export const SalesShipping: GlobalConfig = {
       admin: {
         placeholder: '5000',
         description: 'Valor del envío a domicilio sumado automáticamente en el carrito y WhatsApp.',
+      },
+    },
+    {
+      name: 'tituloFormularioCheckout',
+      type: 'text',
+      label: 'Título del Formulario en el Carrito',
+      defaultValue: 'Datos de Entrega Inmediata',
+      admin: {
+        description: 'Texto del encabezado que aparece sobre los campos de entrega en el carrito.',
+      },
+    },
+    {
+      name: 'habilitarMetodosPago',
+      type: 'checkbox',
+      label: 'Habilitar Selección de Método de Pago en el Carrito',
+      defaultValue: true,
+      admin: {
+        description: 'Permite que el cliente seleccione cómo desea pagar antes de enviar el pedido a WhatsApp.',
+      },
+    },
+    {
+      name: 'metodosPago',
+      type: 'array',
+      label: 'Métodos de Pago Disponibles',
+      defaultValue: [
+        { nombre: 'Efectivo contra entrega' },
+        { nombre: 'Transferencia Nequi / Daviplata' },
+        { nombre: 'Datáfono / Tarjeta' },
+      ],
+      fields: [
+        {
+          name: 'nombre',
+          type: 'text',
+          label: 'Nombre del Método de Pago',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'pieDePaginaCheckout',
+      type: 'text',
+      label: 'Texto al Pie del Carrito',
+      defaultValue: 'Pedido directo sin intermediarios ni cargos de servicio.',
+      admin: {
+        description: 'Mensaje de confianza al pie del botón de WhatsApp.',
       },
     },
     {

@@ -13,9 +13,9 @@ export const Products: CollectionConfig = {
   },
   access: {
     read: anyoneCanRead,
-    create: isStaff, // SuperAdmin absoluto y Admin de la tienda
-    update: isStaff, // SuperAdmin absoluto y Admin de la tienda
-    delete: isStaff, // SuperAdmin absoluto y Admin de la tienda
+    create: isStaff, // SuperAdmin y Admin de la tienda
+    update: isStaff, // SuperAdmin y Admin de la tienda
+    delete: isStaff, // SuperAdmin y Admin de la tienda
     admin: hasAdminPanelAccess,
   },
   fields: [
@@ -31,12 +31,12 @@ export const Products: CollectionConfig = {
     {
       name: 'precio',
       type: 'number',
-      label: 'Precio ($)',
+      label: 'Precio Base ($)',
       required: true,
       min: 0,
       admin: {
         placeholder: 'Ej. 22000',
-        description: 'Valor del producto en moneda local (ej. COP o USD).',
+        description: 'Valor base del producto en moneda local (ej. COP o USD).',
       },
     },
     {
@@ -83,6 +83,59 @@ export const Products: CollectionConfig = {
       admin: {
         description: 'Muestra una insignia dorada "Favorito" en el menú.',
       },
+    },
+    {
+      name: 'gruposOpciones',
+      type: 'array',
+      label: 'Grupos de Opciones / Sabores / Variantes',
+      admin: {
+        description:
+          'Configura opciones para que el cliente elija (ej. Sabores de jugo, Bebida del combo, Término de carne, Salsas).',
+      },
+      fields: [
+        {
+          name: 'titulo',
+          type: 'text',
+          label: 'Título del Grupo (ej. Elige el Sabor, Bebida del Combo, Salsa)',
+          required: true,
+          admin: {
+            placeholder: 'Ej. Elige el Sabor',
+          },
+        },
+        {
+          name: 'requerido',
+          type: 'checkbox',
+          label: 'Selección Obligatoria',
+          defaultValue: true,
+        },
+        {
+          name: 'opciones',
+          type: 'array',
+          label: 'Opciones / Sabores Disponibles',
+          required: true,
+          fields: [
+            {
+              name: 'nombre',
+              type: 'text',
+              label: 'Nombre de la Opción o Sabor',
+              required: true,
+              admin: {
+                placeholder: 'Ej. Maracuyá, Mora, Lulo, Coca-Cola',
+              },
+            },
+            {
+              name: 'precioExtra',
+              type: 'number',
+              label: 'Costo Adicional (Opcional, $)',
+              defaultValue: 0,
+              min: 0,
+              admin: {
+                placeholder: '0 si no tiene recargo adicional',
+              },
+            },
+          ],
+        },
+      ],
     },
   ],
 }

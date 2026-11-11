@@ -28,6 +28,14 @@ export const mockSalesShipping: SalesShipping = {
     { dias: 'Viernes y Sábados', horas: '11:30 AM - 11:00 PM' },
     { dias: 'Domingos y Festivos', horas: '12:00 PM - 9:00 PM' },
   ],
+  tituloFormularioCheckout: 'Datos de Entrega Inmediata',
+  habilitarMetodosPago: true,
+  metodosPago: [
+    { nombre: 'Efectivo contra entrega' },
+    { nombre: 'Transferencia Nequi / Daviplata' },
+    { nombre: 'Datáfono / Tarjeta a domicilio' },
+  ],
+  pieDePaginaCheckout: 'Pedido directo sin intermediarios ni cargos de servicio.',
 }
 
 export const mockHeroContent: HeroContentData = {
@@ -156,13 +164,65 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod-6',
-    nombre: 'Limonada de Coco & Panela Frappé',
+    nombre: 'Limonada de Coco & Frutas Frappé',
     precio: 9500,
     descripcion:
-      'Cremosa leche de coco natural, zumo de limones recién exprimidos y panela orgánica batidos al punto de nieve.',
+      'Cremosa leche de coco natural, zumo de limones recién exprimidos y fruta fresca batidos al punto de nieve.',
     imagenUrl: '/images/arepas-3.jpg',
     categoria: 'bebidas-artesanales',
     disponible: true,
     destacado: false,
+    gruposOpciones: [
+      {
+        titulo: 'Elige el Sabor',
+        requerido: true,
+        opciones: [
+          { nombre: 'Coco Tradicional' },
+          { nombre: 'Cerezada' },
+          { nombre: 'Mango Biche' },
+          { nombre: 'Hierbabuena' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'prod-7',
+    nombre: 'Super Combo Pareja Panda Grill',
+    precio: 42000,
+    descripcion:
+      'Combo especial para compartir: 2 Arepas Especiales al gusto, 2 Bebidas y porción de papas rústicas con salsas.',
+    imagenUrl: '/images/arepas-1.jpg',
+    categoria: 'parrilla-carbon',
+    disponible: true,
+    destacado: true,
+    gruposOpciones: [
+      {
+        titulo: 'Primera Arepa',
+        requerido: true,
+        opciones: [
+          { nombre: 'Paisa Suprema con Chicharrón' },
+          { nombre: 'Carne Mechada al Carbón' },
+          { nombre: 'Pollo y Tocineta' },
+        ],
+      },
+      {
+        titulo: 'Segunda Arepa',
+        requerido: true,
+        opciones: [
+          { nombre: 'Paisa Suprema con Chicharrón' },
+          { nombre: 'Carne Mechada al Carbón' },
+          { nombre: 'Pollo y Tocineta' },
+        ],
+      },
+      {
+        titulo: 'Bebidas del Combo',
+        requerido: true,
+        opciones: [
+          { nombre: '2 Coca-Cola 400ml' },
+          { nombre: '2 Postobón Manzana' },
+          { nombre: '2 Limonadas de Coco' },
+        ],
+      },
+    ],
   },
 ]
