@@ -31,8 +31,20 @@ export interface SalesShipping {
   direccionFisica: string
   horarios: ScheduleItem[]
   tituloFormularioCheckout?: string
+  labelNombre?: string
+  placeholderNombre?: string
+  pedirTelefonoCliente?: boolean
+  labelTelefono?: string
+  placeholderTelefono?: string
+  labelDireccion?: string
+  placeholderDireccion?: string
+  pedirNotas?: boolean
+  labelNotas?: string
+  placeholderNotas?: string
   habilitarMetodosPago?: boolean
+  labelMetodosPago?: string
   metodosPago?: PaymentMethodItem[]
+  textoBotonCheckout?: string
   pieDePaginaCheckout?: string
 }
 

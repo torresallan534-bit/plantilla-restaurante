@@ -7,6 +7,7 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['name', 'email', 'role'],
+    group: '⚙️ Sistema',
     hidden: ({ user }) => user?.role !== 'superadmin', // Oculto completamente para clientes (admin)
   },
   hooks: {

@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Truck,
   CreditCard,
+  Phone,
 } from 'lucide-react'
 import { useCart, getItemUnitPrice } from '../context/CartContext'
 import { SalesShipping } from '../types'
@@ -45,10 +46,11 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
       : defaultPaymentMethods
 
   const [nombreCliente, setNombreCliente] = useState('')
+  const [telefonoCliente, setTelefonoCliente] = useState('')
   const [direccion, setDireccion] = useState('')
   const [metodoPago, setMetodoPago] = useState<string>(paymentMethods[0] || 'Efectivo contra entrega')
   const [notas, setNotas] = useState('')
-  const [errors, setErrors] = useState<{ nombre?: string; direccion?: string }>({})
+  const [errors, setErrors] = useState<{ nombre?: string; telefono?: string; direccion?: string }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   if (!isCartOpen) return null
@@ -74,9 +76,12 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
   const total = subtotal + (items.length > 0 ? costoDomicilio : 0)
 
   const validateForm = () => {
-    const newErrors: { nombre?: string; direccion?: string } = {}
+    const newErrors: { nombre?: string; telefono?: string; direccion?: string } = {}
     if (!nombreCliente.trim()) {
       newErrors.nombre = 'Por favor ingresa tu nombre'
+    }
+    if (salesShipping.pedirTelefonoCliente !== false && !telefonoCliente.trim()) {
+      newErrors.telefono = 'Por favor ingresa tu número de contacto'
     }
     if (!direccion.trim()) {
       newErrors.direccion = 'Por favor ingresa tu dirección de entrega'
@@ -127,13 +132,17 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
       subtotal
     )}\n${domicilioWhatsApp}\n${totalWhatsApp}`
 
+    if (salesShipping.pedirTelefonoCliente !== false && telefonoCliente.trim()) {
+      message += `\nTeléfono: ${telefonoCliente.trim()}`
+    }
+
     if (salesShipping.habilitarMetodosPago !== false && metodoPago) {
       message += `\nMétodo de pago: ${metodoPago}`
     }
 
     message += `\nDirección: ${direccion.trim()}`
 
-    if (notas.trim()) {
+    if (salesShipping.pedirNotas !== false && notas.trim()) {
       message += `\nNotas: ${notas.trim()}`
     }
 
@@ -147,6 +156,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     clearCart()
     closeCart()
     setNombreCliente('')
+    setTelefonoCliente('')
     setDireccion('')
     setNotas('')
     setIsSubmitting(false)
@@ -298,7 +308,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                     {/* Nombre */}
                     <div>
                       <label className="block text-xs font-medium text-stone-700 mb-1">
-                        Tu Nombre Completo *
+                        {salesShipping.labelNombre || 'Tu Nombre Completo *'}
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
@@ -312,7 +322,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                             setNombreCliente(e.target.value)
                             if (errors.nombre) setErrors({ ...errors, nombre: undefined })
                           }}
-                          placeholder="Ej. Juan Pérez"
+                          placeholder={salesShipping.placeholderNombre || 'Ej. Juan Pérez'}
                           className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary ${
                             errors.nombre ? 'border-red-400' : 'border-stone-200'
                           }`}
@@ -323,10 +333,40 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                       )}
                     </div>
 
+                    {/* Teléfono / WhatsApp (Configurable) */}
+                    {salesShipping.pedirTelefonoCliente !== false && (
+                      <div>
+                        <label className="block text-xs font-medium text-stone-700 mb-1">
+                          {salesShipping.labelTelefono || 'Teléfono / WhatsApp *'}
+                        </label>
+                        <div className="relative">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+                            <Phone className="h-4 w-4" />
+                          </div>
+                          <input
+                            type="tel"
+                            required
+                            value={telefonoCliente}
+                            onChange={(e) => {
+                              setTelefonoCliente(e.target.value)
+                              if (errors.telefono) setErrors({ ...errors, telefono: undefined })
+                            }}
+                            placeholder={salesShipping.placeholderTelefono || 'Ej. 300 123 4567'}
+                            className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary ${
+                              errors.telefono ? 'border-red-400' : 'border-stone-200'
+                            }`}
+                          />
+                        </div>
+                        {errors.telefono && (
+                          <p className="mt-1 text-[11px] text-red-500">{errors.telefono}</p>
+                        )}
+                      </div>
+                    )}
+
                     {/* Dirección */}
                     <div>
                       <label className="block text-xs font-medium text-stone-700 mb-1">
-                        Dirección de Entrega *
+                        {salesShipping.labelDireccion || 'Dirección de Entrega *'}
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
@@ -340,7 +380,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                             setDireccion(e.target.value)
                             if (errors.direccion) setErrors({ ...errors, direccion: undefined })
                           }}
-                          placeholder="Ej. Cra 15 # 85-30 Apto 402"
+                          placeholder={salesShipping.placeholderDireccion || 'Ej. Cra 15 # 85-30 Apto 402'}
                           className={`w-full rounded-xl border bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary ${
                             errors.direccion ? 'border-red-400' : 'border-stone-200'
                           }`}
@@ -356,7 +396,7 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                       <div>
                         <label className="block text-xs font-medium text-stone-700 mb-1.5 flex items-center gap-1.5">
                           <CreditCard className="h-3.5 w-3.5 text-stone-500" />
-                          <span>Método de Pago *</span>
+                          <span>{salesShipping.labelMetodosPago || 'Método de Pago *'}</span>
                         </label>
                         <div className="space-y-1.5">
                           {paymentMethods.map((metodo) => {
@@ -392,23 +432,25 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                     )}
 
                     {/* Notas */}
-                    <div>
-                      <label className="block text-xs font-medium text-stone-700 mb-1">
-                        Notas opcionales (salsas aparte, cubiertos, etc.)
-                      </label>
-                      <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
-                          <FileText className="h-4 w-4" />
+                    {salesShipping.pedirNotas !== false && (
+                      <div>
+                        <label className="block text-xs font-medium text-stone-700 mb-1">
+                          {salesShipping.labelNotas || 'Notas opcionales (salsas aparte, cubiertos, etc.)'}
+                        </label>
+                        <div className="relative">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+                            <FileText className="h-4 w-4" />
+                          </div>
+                          <input
+                            type="text"
+                            value={notas}
+                            onChange={(e) => setNotas(e.target.value)}
+                            placeholder={salesShipping.placeholderNotas || 'Ej. Salsa de ajo aparte, timbre averiado'}
+                            className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                          />
                         </div>
-                        <input
-                          type="text"
-                          value={notas}
-                          onChange={(e) => setNotas(e.target.value)}
-                          placeholder="Ej. Salsa de ajo aparte, timbre averiado"
-                          className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-3 text-xs text-theme-text placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                        />
                       </div>
-                    </div>
+                    )}
                   </div>
                 </form>
               </div>
@@ -455,7 +497,9 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                 className="w-full flex items-center justify-center gap-3 rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 active:scale-[0.99] transition"
               >
                 <Send className="h-4 w-4" />
-                {isSubmitting ? 'Enviando a WhatsApp...' : 'Enviar Pedido por WhatsApp'}
+                {isSubmitting
+                  ? 'Enviando a WhatsApp...'
+                  : salesShipping.textoBotonCheckout || 'Enviar Pedido por WhatsApp'}
               </button>
 
               <p className="text-center text-[11px] text-stone-400 font-sans">

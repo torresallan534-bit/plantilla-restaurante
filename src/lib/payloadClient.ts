@@ -83,14 +83,32 @@ export async function getSalesShipping(): Promise<SalesShipping> {
           : mockSalesShipping.horarios,
       tituloFormularioCheckout:
         data.tituloFormularioCheckout || mockSalesShipping.tituloFormularioCheckout,
+      labelNombre: data.labelNombre || mockSalesShipping.labelNombre,
+      placeholderNombre: data.placeholderNombre || mockSalesShipping.placeholderNombre,
+      pedirTelefonoCliente:
+        typeof data.pedirTelefonoCliente === 'boolean'
+          ? data.pedirTelefonoCliente
+          : mockSalesShipping.pedirTelefonoCliente,
+      labelTelefono: data.labelTelefono || mockSalesShipping.labelTelefono,
+      placeholderTelefono: data.placeholderTelefono || mockSalesShipping.placeholderTelefono,
+      labelDireccion: data.labelDireccion || mockSalesShipping.labelDireccion,
+      placeholderDireccion: data.placeholderDireccion || mockSalesShipping.placeholderDireccion,
+      pedirNotas:
+        typeof data.pedirNotas === 'boolean'
+          ? data.pedirNotas
+          : mockSalesShipping.pedirNotas,
+      labelNotas: data.labelNotas || mockSalesShipping.labelNotas,
+      placeholderNotas: data.placeholderNotas || mockSalesShipping.placeholderNotas,
       habilitarMetodosPago:
         typeof data.habilitarMetodosPago === 'boolean'
           ? data.habilitarMetodosPago
           : mockSalesShipping.habilitarMetodosPago,
+      labelMetodosPago: data.labelMetodosPago || mockSalesShipping.labelMetodosPago,
       metodosPago:
         Array.isArray(data.metodosPago) && data.metodosPago.length > 0
           ? (data.metodosPago as any)
           : mockSalesShipping.metodosPago,
+      textoBotonCheckout: data.textoBotonCheckout || mockSalesShipping.textoBotonCheckout,
       pieDePaginaCheckout:
         data.pieDePaginaCheckout || mockSalesShipping.pieDePaginaCheckout,
     }

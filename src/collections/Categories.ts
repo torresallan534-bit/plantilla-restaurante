@@ -10,6 +10,7 @@ export const Categories: CollectionConfig = {
   admin: {
     useAsTitle: 'nombre',
     defaultColumns: ['nombre', 'slug', 'orden'],
+    group: '🍽️ Menú y Carta',
   },
   access: {
     read: anyoneCanRead,
@@ -48,17 +49,17 @@ export const Categories: CollectionConfig = {
         { label: 'Cubiertos / General (Utensils)', value: 'utensils' },
         { label: 'Fuego / Parrilla (Flame)', value: 'flame' },
         { label: 'Bebidas (Coffee / Cup)', value: 'coffee' },
-        { label: 'Estrella / Especial (Sparkles)', value: 'sparkles' },
+        { label: 'Estrella / Favorito (Sparkles)', value: 'sparkles' },
         { label: 'Corazón / Saludable (Heart)', value: 'heart' },
       ],
     },
     {
       name: 'orden',
       type: 'number',
-      label: 'Orden de Aparición',
-      defaultValue: 0,
+      label: 'Orden de Visualización',
+      defaultValue: 1,
       admin: {
-        description: 'Número menor aparece primero en la barra de categorías.',
+        description: 'Define la posición en la barra de categorías (1 primero, 2 segundo, etc.).',
       },
     },
   ],

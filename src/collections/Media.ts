@@ -10,6 +10,7 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: 'alt',
     defaultColumns: ['filename', 'alt', 'filesize', 'createdAt'],
+    group: '🖼️ Multimedia',
   },
   upload: {
     // Deshabilita almacenamiento en disco local para evitar errores EROFS en Vercel Serverless
@@ -51,7 +52,7 @@ export const Media: CollectionConfig = {
       label: 'Texto Alternativo (Descripción para SEO y Accesibilidad)',
       required: false,
       admin: {
-        placeholder: 'Ej. Arepa Paisa Suprema con chicharrón crocante',
+        placeholder: 'Ej. Foto del plato o logo',
       },
     },
   ],

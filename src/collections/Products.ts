@@ -10,6 +10,7 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'nombre',
     defaultColumns: ['nombre', 'precio', 'categoria', 'disponible', 'destacado'],
+    group: '🍽️ Menú y Carta',
   },
   access: {
     read: anyoneCanRead,
@@ -20,152 +21,197 @@ export const Products: CollectionConfig = {
   },
   fields: [
     {
-      name: 'nombre',
-      type: 'text',
-      label: 'Nombre del Plato o Bebida',
-      required: true,
-      admin: {
-        placeholder: 'Ej. Arepa Paisa Suprema con Chicharrón',
-      },
-    },
-    {
-      name: 'precio',
-      type: 'number',
-      label: 'Precio Base ($)',
-      required: true,
-      min: 0,
-      admin: {
-        placeholder: 'Ej. 22000',
-        description: 'Valor base del producto en moneda local (ej. COP o USD).',
-      },
-    },
-    {
-      name: 'descripcion',
-      type: 'textarea',
-      label: 'Descripción Apetitosa',
-      required: true,
-      admin: {
-        placeholder: 'Describe los ingredientes frescos y preparación artesanal...',
-      },
-    },
-    {
-      name: 'imagen',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Fotografía del Producto (Subir Archivo a Media)',
-      required: false,
-      admin: {
-        description: 'Sube la foto del plato directamente a la biblioteca multimedia.',
-      },
-    },
-    {
-      name: 'categoria',
-      type: 'relationship',
-      relationTo: 'categories',
-      label: 'Categoría del Menú',
-      required: true,
-      hasMany: false,
-    },
-    {
-      name: 'disponible',
-      type: 'checkbox',
-      label: 'Disponible para Pedidos (Interruptor de Agotado)',
-      defaultValue: true,
-      admin: {
-        description: 'Desmarcar para marcar automáticamente como Agotado en la web y deshabilitar compras.',
-      },
-    },
-    {
-      name: 'destacado',
-      type: 'checkbox',
-      label: 'Plato Estrella / Destacado',
-      defaultValue: false,
-      admin: {
-        description: 'Muestra una insignia dorada "Favorito" en el menú.',
-      },
-    },
-    {
-      name: 'gruposOpciones',
-      type: 'array',
-      label: 'Grupos de Opciones / Sabores / Variantes',
-      admin: {
-        description:
-          'Configura opciones para que el cliente elija (ej. Sabores de jugo, Bebida del combo, Término de carne, Salsas, o Combos de N piezas).',
-      },
-      fields: [
+      type: 'tabs',
+      tabs: [
+        // ====================================================================
+        // PESTAÑA 1: INFORMACIÓN BÁSICA DEL PLATO
+        // ====================================================================
         {
-          name: 'titulo',
-          type: 'text',
-          label: 'Título del Grupo (ej. Elige el Sabor, Elige tus 4 empanadas, Salsa)',
-          required: true,
-          admin: {
-            placeholder: 'Ej. Elige tus 4 empanadas',
-          },
-        },
-        {
-          name: 'tipoSeleccion',
-          type: 'select',
-          label: 'Tipo de Selección',
-          defaultValue: 'unica',
-          required: true,
-          options: [
-            {
-              label: 'Opción Única (1 sola elección, ej. Sabor de jugo o término)',
-              value: 'unica',
-            },
-            {
-              label: 'Opción Múltiple / Cantidades de Combo (ej. Elige 4 empanadas)',
-              value: 'multiple',
-            },
-          ],
-          admin: {
-            description:
-              'Define si el cliente elige solo 1 opción o si es un combo con una cantidad específica de unidades repartidas.',
-          },
-        },
-        {
-          name: 'limiteSeleccion',
-          type: 'number',
-          label: 'Límite / Cantidad a Elegir',
-          defaultValue: 1,
-          min: 1,
-          admin: {
-            condition: (data, siblingData) => siblingData?.tipoSeleccion === 'multiple',
-            placeholder: '4',
-            description:
-              'Cantidad máxima de unidades que el cliente puede repartir entre las opciones del combo (ej. 4 empanadas).',
-          },
-        },
-        {
-          name: 'requerido',
-          type: 'checkbox',
-          label: 'Selección Obligatoria',
-          defaultValue: true,
-        },
-        {
-          name: 'opciones',
-          type: 'array',
-          label: 'Opciones / Sabores Disponibles',
-          required: true,
+          label: '🍽️ Información del Plato',
+          description: 'Nombre, precio base, categoría, foto y disponibilidad.',
           fields: [
             {
               name: 'nombre',
               type: 'text',
-              label: 'Nombre de la Opción o Sabor',
+              label: 'Nombre del Plato o Bebida',
               required: true,
               admin: {
-                placeholder: 'Ej. Empanada de Pollo, Maracuyá, Coca-Cola',
+                placeholder: 'Ej. Arepa Paisa Suprema con Chicharrón',
               },
             },
             {
-              name: 'precioExtra',
-              type: 'number',
-              label: 'Costo Adicional (Opcional, $)',
-              defaultValue: 0,
-              min: 0,
+              type: 'row',
+              fields: [
+                {
+                  name: 'precio',
+                  type: 'number',
+                  label: 'Precio Base ($)',
+                  required: true,
+                  min: 0,
+                  admin: {
+                    width: '50%',
+                    placeholder: 'Ej. 22000',
+                    description: 'Valor base en moneda local.',
+                  },
+                },
+                {
+                  name: 'categoria',
+                  type: 'relationship',
+                  relationTo: 'categories',
+                  label: 'Categoría del Menú',
+                  required: true,
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'descripcion',
+              type: 'textarea',
+              label: 'Descripción Apetitosa',
+              required: true,
               admin: {
-                placeholder: '0 si no tiene recargo adicional',
+                placeholder: 'Describe los ingredientes frescos y preparación artesanal...',
               },
+            },
+            {
+              name: 'imagen',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Fotografía del Producto (Subir Archivo a Media)',
+              required: false,
+              admin: {
+                description: 'Sube la foto del plato directamente a la biblioteca multimedia.',
+              },
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'disponible',
+                  type: 'checkbox',
+                  label: 'Disponible para Pedidos (Interruptor de Agotado)',
+                  defaultValue: true,
+                  admin: {
+                    width: '50%',
+                    description: 'Desmarcar para mostrar cartel de "Agotado" y bloquear compras.',
+                  },
+                },
+                {
+                  name: 'destacado',
+                  type: 'checkbox',
+                  label: 'Plato Estrella / Destacado',
+                  defaultValue: false,
+                  admin: {
+                    width: '50%',
+                    description: 'Muestra una insignia dorada "Favorito" en el menú.',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+
+        // ====================================================================
+        // PESTAÑA 2: SABORES, OPCIONES Y COMBOS
+        // ====================================================================
+        {
+          label: '✨ Sabores y Combos (Opciones)',
+          description: 'Configura si el cliente puede elegir sabores, acompañamientos o armar un combo con un límite de unidades.',
+          fields: [
+            {
+              name: 'gruposOpciones',
+              type: 'array',
+              label: 'Grupos de Opciones / Sabores / Variantes',
+              admin: {
+                description:
+                  'Añade uno o más grupos de elección (ej. "Elige el Sabor", "Bebida del Combo", "Elige tus 4 empanadas").',
+              },
+              fields: [
+                {
+                  name: 'titulo',
+                  type: 'text',
+                  label: 'Título del Grupo (ej. Elige tus 4 empanadas, Sabor de jugo)',
+                  required: true,
+                  admin: {
+                    placeholder: 'Ej. Elige tus 4 empanadas',
+                  },
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'tipoSeleccion',
+                      type: 'select',
+                      label: 'Tipo de Selección',
+                      defaultValue: 'unica',
+                      required: true,
+                      options: [
+                        {
+                          label: 'Opción Única (1 sola elección, ej. Sabor de jugo o término)',
+                          value: 'unica',
+                        },
+                        {
+                          label: 'Opción Múltiple / Cantidades de Combo (ej. Elige 4 empanadas)',
+                          value: 'multiple',
+                        },
+                      ],
+                      admin: {
+                        width: '50%',
+                        description: 'Define si el cliente elige 1 opción o reparte varias unidades.',
+                      },
+                    },
+                    {
+                      name: 'limiteSeleccion',
+                      type: 'number',
+                      label: 'Cantidad Máxima a Elegir',
+                      defaultValue: 1,
+                      min: 1,
+                      admin: {
+                        width: '50%',
+                        condition: (data, siblingData) => siblingData?.tipoSeleccion === 'multiple',
+                        placeholder: '4',
+                        description: 'Límite de unidades que el cliente puede sumar en este combo.',
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'requerido',
+                  type: 'checkbox',
+                  label: 'Selección Obligatoria para Comprar',
+                  defaultValue: true,
+                },
+                {
+                  name: 'opciones',
+                  type: 'array',
+                  label: 'Opciones / Sabores Disponibles',
+                  required: true,
+                  fields: [
+                    {
+                      name: 'nombre',
+                      type: 'text',
+                      label: 'Nombre de la Opción o Sabor',
+                      required: true,
+                      admin: {
+                        placeholder: 'Ej. Empanada de Pollo, Maracuyá, Coca-Cola',
+                      },
+                    },
+                    {
+                      name: 'precioExtra',
+                      type: 'number',
+                      label: 'Costo Adicional (Opcional, $)',
+                      defaultValue: 0,
+                      min: 0,
+                      admin: {
+                        placeholder: '0 si no tiene recargo adicional',
+                      },
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
