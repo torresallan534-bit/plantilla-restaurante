@@ -3,21 +3,44 @@ import { anyoneCanRead, isStaff } from '../access/roles'
 
 export const SalesShipping: GlobalConfig = {
   slug: 'sales-shipping',
-  label: 'Configuración de Ventas y Envíos',
+  label: 'Configuración de Ventas, Envíos y Sitio Web',
   admin: {
     group: 'Operación del Restaurante',
   },
   access: {
     read: anyoneCanRead,
-    update: isStaff, // SuperAdmin y Admin pueden editar precios de envío, formulario y WhatsApp
+    update: isStaff, // SuperAdmin y Admin (Cliente) pueden editar
   },
   fields: [
     {
       name: 'nombreRestaurante',
       type: 'text',
-      label: 'Nombre del Restaurante',
+      label: 'Nombre Comercial del Restaurante',
       required: true,
       defaultValue: 'Panda Arepas & Grill',
+      admin: {
+        placeholder: 'Ej. Panda Arepas & Grill',
+      },
+    },
+    {
+      name: 'tituloSitioWeb',
+      type: 'text',
+      label: 'Título de la Página Web (Pestaña del Navegador / SEO)',
+      defaultValue: 'Panda Arepas & Grill | Menú Digital & Pedidos por WhatsApp',
+      admin: {
+        description: 'Nombre visible en la pestaña del navegador de tus clientes y en Google.',
+        placeholder: 'Ej. Mi Restaurante | Menú Digital & Domicilios',
+      },
+    },
+    {
+      name: 'descripcionSitioWeb',
+      type: 'textarea',
+      label: 'Descripción de la Página Web (SEO / Google)',
+      defaultValue:
+        'Sabor auténtico y artesanal. Pide tu domicilio directamente a nuestro WhatsApp oficial.',
+      admin: {
+        description: 'Resumen descriptivo que aparecerá en buscadores y enlaces compartidos.',
+      },
     },
     {
       name: 'numeroWhatsApp',
@@ -31,24 +54,47 @@ export const SalesShipping: GlobalConfig = {
       },
     },
     {
-      name: 'mensajePredeterminado',
-      type: 'textarea',
-      label: 'Encabezado del Mensaje de WhatsApp',
-      defaultValue: 'Hola {restaurante}, soy {nombre}, para pedir:',
+      name: 'tipoDomicilio',
+      type: 'select',
+      label: 'Modalidad de Costo de Domicilio',
+      defaultValue: 'fijo',
+      required: true,
+      options: [
+        {
+          label: 'Tarifa Fija de Envío (Se suma numéricamente al total)',
+          value: 'fijo',
+        },
+        {
+          label: 'A convenir con el domiciliario (Texto informativo en el carrito)',
+          value: 'a_convenir',
+        },
+      ],
       admin: {
-        description: 'Texto introductorio antes del listado de platos.',
+        description:
+          'Elige si cobras un valor fijo estándar o si el costo se define directamente con el repartidor.',
       },
     },
     {
       name: 'costoDomicilio',
       type: 'number',
-      label: 'Costo de Domicilio ($)',
-      required: true,
+      label: 'Costo Fijo de Domicilio ($)',
       min: 0,
       defaultValue: 5000,
       admin: {
+        condition: (data) => data?.tipoDomicilio !== 'a_convenir',
         placeholder: '5000',
-        description: 'Valor del envío a domicilio sumado automáticamente en el carrito y WhatsApp.',
+        description: 'Valor del envío sumado automáticamente al subtotal en el carrito y WhatsApp.',
+      },
+    },
+    {
+      name: 'textoDomicilioPersonalizado',
+      type: 'text',
+      label: 'Mensaje de Domicilio a Convenir',
+      defaultValue: 'El precio se determina con el domiciliario',
+      admin: {
+        condition: (data) => data?.tipoDomicilio === 'a_convenir',
+        placeholder: 'Ej. El precio se determina con el domiciliario',
+        description: 'Texto que se mostrará en lugar del valor numérico en el carrito y WhatsApp.',
       },
     },
     {
@@ -94,6 +140,15 @@ export const SalesShipping: GlobalConfig = {
       defaultValue: 'Pedido directo sin intermediarios ni cargos de servicio.',
       admin: {
         description: 'Mensaje de confianza al pie del botón de WhatsApp.',
+      },
+    },
+    {
+      name: 'mensajePredeterminado',
+      type: 'textarea',
+      label: 'Encabezado del Mensaje de WhatsApp',
+      defaultValue: 'Hola {restaurante}, soy {nombre}, para pedir:',
+      admin: {
+        description: 'Texto introductorio antes del listado de platos.',
       },
     },
     {

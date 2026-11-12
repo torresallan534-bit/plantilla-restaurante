@@ -1,28 +1,29 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isStaff } from '../access/roles'
+import { anyoneCanRead, isSuperAdmin } from '../access/roles'
 
 export const FooterContent: GlobalConfig = {
   slug: 'footer-content',
-  label: 'Footer (Pie de Página & SEO)',
+  label: 'Footer (Pie de Página & Redes)',
   admin: {
     group: 'Contenido Web',
+    hidden: ({ user }) => user?.role !== 'superadmin',
   },
   access: {
     read: anyoneCanRead,
-    update: isStaff, // SuperAdmin y Admin pueden editar SEO y redes
+    update: isSuperAdmin, // SOLO SuperAdmin puede editar créditos y redes
   },
   fields: [
     {
       name: 'tituloSEO',
       type: 'text',
-      label: 'Título SEO del Restaurante',
+      label: 'Título del Footer',
       required: true,
       defaultValue: 'Panda Arepas & Grill - Maestros del Carbón',
     },
     {
       name: 'descripcionSEO',
       type: 'textarea',
-      label: 'Descripción SEO / Párrafo del Footer',
+      label: 'Descripción / Párrafo del Footer',
       required: true,
       defaultValue:
         'Auténtico maíz peto procesado artesanalmente día a día. Rellenos generosos y el mejor toque ahumado al carbón.',
@@ -58,7 +59,7 @@ export const FooterContent: GlobalConfig = {
         {
           name: 'url',
           type: 'text',
-          label: 'URL del Perfil',
+          label: 'Enlace / URL del Perfil',
           required: true,
         },
       ],

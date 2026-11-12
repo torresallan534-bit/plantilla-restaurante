@@ -64,13 +64,18 @@ export async function getSalesShipping(): Promise<SalesShipping> {
 
     return {
       nombreRestaurante: data.nombreRestaurante || mockSalesShipping.nombreRestaurante,
+      tituloSitioWeb: data.tituloSitioWeb || mockSalesShipping.tituloSitioWeb,
+      descripcionSitioWeb: data.descripcionSitioWeb || mockSalesShipping.descripcionSitioWeb,
       numeroWhatsApp: data.numeroWhatsApp || mockSalesShipping.numeroWhatsApp,
       mensajePredeterminado:
         data.mensajePredeterminado || mockSalesShipping.mensajePredeterminado,
+      tipoDomicilio: data.tipoDomicilio || mockSalesShipping.tipoDomicilio || 'fijo',
       costoDomicilio:
         typeof data.costoDomicilio === 'number'
           ? data.costoDomicilio
           : mockSalesShipping.costoDomicilio,
+      textoDomicilioPersonalizado:
+        data.textoDomicilioPersonalizado || mockSalesShipping.textoDomicilioPersonalizado,
       direccionFisica: data.direccionFisica || mockSalesShipping.direccionFisica,
       horarios:
         data.horarios && data.horarios.length > 0
@@ -240,6 +245,8 @@ export async function getProducts(): Promise<Product[]> {
           ? doc.gruposOpciones.map((g: any) => ({
               id: g.id,
               titulo: g.titulo,
+              tipoSeleccion: g.tipoSeleccion || 'unica',
+              limiteSeleccion: typeof g.limiteSeleccion === 'number' ? g.limiteSeleccion : 1,
               requerido: g.requerido !== false,
               opciones: Array.isArray(g.opciones)
                 ? g.opciones.map((o: any) => ({

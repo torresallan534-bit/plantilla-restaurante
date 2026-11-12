@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/context/CartContext'
-import { getThemeBranding } from '@/lib/payloadClient'
+import { getThemeBranding, getSalesShipping } from '@/lib/payloadClient'
 
-// Revalidación dinámica para reflejar inmediatamente cambios de colores en Payload CMS
+// Revalidación dinámica para reflejar inmediatamente cambios de colores y SEO en Payload CMS
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
@@ -20,14 +20,23 @@ const playfairDisplay = Playfair_Display({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
-  title: 'Panda Arepas & Grill | Menú Digital & Pedidos por WhatsApp',
-  description:
-    'Plantilla Maestra para Restaurantes por Panda Haus. Sabor auténtico del maíz peto artesanal y carnes a la brasa. Pide tu domicilio directamente a nuestro WhatsApp.',
-  icons: {
-    icon: '/logo/Logo.webp',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const salesShipping = await getSalesShipping()
+  const title =
+    salesShipping.tituloSitioWeb ||
+    `${salesShipping.nombreRestaurante || 'Panda Arepas & Grill'} | Menú Digital & Pedidos por WhatsApp`
+  const description =
+    salesShipping.descripcionSitioWeb ||
+    'Sabor auténtico y artesanal. Pide tu domicilio directamente a nuestro WhatsApp oficial.'
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
+    title,
+    description,
+    icons: {
+      icon: '/logo/Logo.webp',
+    },
+  }
 }
 
 /**

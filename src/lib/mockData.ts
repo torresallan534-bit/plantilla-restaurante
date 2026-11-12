@@ -19,9 +19,14 @@ export const mockThemeBranding: ThemeBranding = {
 
 export const mockSalesShipping: SalesShipping = {
   nombreRestaurante: 'Panda Arepas & Grill',
+  tituloSitioWeb: 'Panda Arepas & Grill | Menú Digital & Pedidos por WhatsApp',
+  descripcionSitioWeb:
+    'Sabor auténtico del maíz peto artesanal y carnes a la brasa. Pide tu domicilio directamente a nuestro WhatsApp oficial.',
   numeroWhatsApp: '573001234567',
   mensajePredeterminado: 'Hola {restaurante}, soy {nombre}, para pedir:',
+  tipoDomicilio: 'fijo',
   costoDomicilio: 5000,
+  textoDomicilioPersonalizado: 'El precio se determina con el domiciliario',
   direccionFisica: 'Carrera 7 # 68-12, Zona Gourmet',
   horarios: [
     { dias: 'Lunes a Jueves', horas: '11:30 AM - 9:30 PM' },
@@ -221,6 +226,31 @@ export const mockProducts: Product[] = [
           { nombre: '2 Coca-Cola 400ml' },
           { nombre: '2 Postobón Manzana' },
           { nombre: '2 Limonadas de Coco' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'prod-8',
+    nombre: 'Combo 4 Empanadas Tradicionales al Gusto',
+    precio: 16000,
+    descripcion:
+      'Crujientes empanadas de maíz peto recién fritas acompañadas de ají casero. Elige tus 4 empanadas favoritas.',
+    imagenUrl: '/images/arepas-2.jpg',
+    categoria: 'arepas-especiales',
+    disponible: true,
+    destacado: true,
+    gruposOpciones: [
+      {
+        titulo: 'Elige tus 4 empanadas',
+        tipoSeleccion: 'multiple',
+        limiteSeleccion: 4,
+        requerido: true,
+        opciones: [
+          { nombre: 'Empanada de Carne Desmechada' },
+          { nombre: 'Empanada de Pollo Criollo' },
+          { nombre: 'Empanada de Queso y Maíz Tierno' },
+          { nombre: 'Empanada de Chicharrón Crocante' },
         ],
       },
     ],

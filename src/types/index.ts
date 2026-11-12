@@ -21,9 +21,13 @@ export interface PaymentMethodItem {
 
 export interface SalesShipping {
   nombreRestaurante: string
+  tituloSitioWeb?: string
+  descripcionSitioWeb?: string
   numeroWhatsApp: string
   mensajePredeterminado: string
+  tipoDomicilio?: 'fijo' | 'a_convenir'
   costoDomicilio: number
+  textoDomicilioPersonalizado?: string
   direccionFisica: string
   horarios: ScheduleItem[]
   tituloFormularioCheckout?: string
@@ -92,6 +96,8 @@ export interface ProductOptionChoice {
 export interface ProductOptionGroup {
   id?: string
   titulo: string
+  tipoSeleccion?: 'unica' | 'multiple'
+  limiteSeleccion?: number
   requerido?: boolean
   opciones: ProductOptionChoice[]
 }

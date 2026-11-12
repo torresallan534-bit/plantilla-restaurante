@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isSuperAdmin, isStaff, hasAdminPanelAccess } from '../access/roles'
+import { isSuperAdmin, hasAdminPanelAccess } from '../access/roles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -7,6 +7,7 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['name', 'email', 'role'],
+    hidden: ({ user }) => user?.role !== 'superadmin', // Oculto completamente para clientes (admin)
   },
   hooks: {
     beforeChange: [
@@ -37,11 +38,8 @@ export const Users: CollectionConfig = {
         return true
       }
     },
-    read: isStaff,
-    update: ({ req: { user }, id }) => {
-      if (user?.role === 'superadmin') return true
-      return user?.id === id
-    },
+    read: isSuperAdmin,
+    update: isSuperAdmin,
     delete: isSuperAdmin, // Solo SuperAdmin puede eliminar usuarios
     admin: hasAdminPanelAccess,
   },
@@ -64,7 +62,7 @@ export const Users: CollectionConfig = {
           value: 'superadmin',
         },
         {
-          label: 'Admin (Cliente / Gestión de Menú y Contenido)',
+          label: 'Admin (Cliente / Gestión de Menú y Envíos)',
           value: 'admin',
         },
       ],

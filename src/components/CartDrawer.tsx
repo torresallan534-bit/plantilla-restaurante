@@ -66,7 +66,11 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
     (sum, item) => sum + item.quantity * getItemUnitPrice(item),
     0
   )
-  const costoDomicilio = salesShipping.costoDomicilio ?? 5000
+
+  const isDomicilioAConvenir = salesShipping.tipoDomicilio === 'a_convenir'
+  const textoDomicilio =
+    salesShipping.textoDomicilioPersonalizado || 'El precio se determina con el domiciliario'
+  const costoDomicilio = isDomicilioAConvenir ? 0 : (salesShipping.costoDomicilio ?? 5000)
   const total = subtotal + (items.length > 0 ? costoDomicilio : 0)
 
   const validateForm = () => {
@@ -111,11 +115,17 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
       .join('\n')
 
     // Estructura completa enviada a WhatsApp
+    const domicilioWhatsApp = isDomicilioAConvenir
+      ? `Domicilio: ${textoDomicilio}`
+      : `Domicilio: ${formatPrice(costoDomicilio)}`
+
+    const totalWhatsApp = isDomicilioAConvenir
+      ? `Total productos: ${formatPrice(subtotal)} (+ valor de domicilio por definir)`
+      : `Total a pagar: ${formatPrice(total)}`
+
     let message = `Hola ${restaurante}, soy ${nombreCliente.trim()}, para pedir:\n\n${productLines}\n\nSubtotal: ${formatPrice(
       subtotal
-    )}\nDomicilio: ${formatPrice(costoDomicilio)}\nTotal a pagar: ${formatPrice(
-      total
-    )}`
+    )}\n${domicilioWhatsApp}\n${totalWhatsApp}`
 
     if (salesShipping.habilitarMetodosPago !== false && metodoPago) {
       message += `\nMétodo de pago: ${metodoPago}`
@@ -418,13 +428,23 @@ export default function CartDrawer({ salesShipping }: CartDrawerProps) {
                     <Truck className="h-3.5 w-3.5 text-primary" />
                     Costo de Domicilio
                   </span>
-                  <span className="font-semibold text-theme-text">
-                    {formatPrice(costoDomicilio)}
-                  </span>
+                  {isDomicilioAConvenir ? (
+                    <span className="text-[11px] font-semibold text-primary text-right max-w-[200px] leading-tight">
+                      {textoDomicilio}
+                    </span>
+                  ) : (
+                    <span className="font-semibold text-theme-text">
+                      {formatPrice(costoDomicilio)}
+                    </span>
+                  )}
                 </div>
                 <div className="flex justify-between border-t border-stone-200/80 pt-2 text-base font-bold text-theme-text font-serif">
                   <span>Total a pagar:</span>
-                  <span className="text-primary font-bold">{formatPrice(total)}</span>
+                  <span className="text-primary font-bold">
+                    {isDomicilioAConvenir
+                      ? `${formatPrice(subtotal)} (+ Domicilio)`
+                      : formatPrice(total)}
+                  </span>
                 </div>
               </div>
 

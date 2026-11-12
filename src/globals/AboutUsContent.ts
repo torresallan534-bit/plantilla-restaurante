@@ -1,15 +1,16 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isStaff } from '../access/roles'
+import { anyoneCanRead, isSuperAdmin } from '../access/roles'
 
 export const AboutUsContent: GlobalConfig = {
   slug: 'about-us-content',
   label: 'Sección Conócenos (Bento Grid)',
   admin: {
     group: 'Contenido Web',
+    hidden: ({ user }) => user?.role !== 'superadmin',
   },
   access: {
     read: anyoneCanRead,
-    update: isStaff, // SuperAdmin y Admin
+    update: isSuperAdmin, // SOLO SuperAdmin puede editar la historia y bento grid
   },
   fields: [
     {
@@ -52,7 +53,7 @@ export const AboutUsContent: GlobalConfig = {
         {
           name: 'numero',
           type: 'text',
-          label: 'Número o Métrica',
+          label: 'Cifra o Número (ej. 10+, 4.9 ★)',
           required: true,
         },
         {
@@ -67,19 +68,22 @@ export const AboutUsContent: GlobalConfig = {
       name: 'imagen1',
       type: 'upload',
       relationTo: 'media',
-      label: 'Imagen Principal Bento (Subir Archivo a Media)',
+      label: 'Imagen Principal Grande (Vertical)',
+      required: false,
     },
     {
       name: 'imagen2',
       type: 'upload',
       relationTo: 'media',
-      label: 'Imagen Secundaria Bento (Subir Archivo a Media)',
+      label: 'Imagen Secundaria Superior',
+      required: false,
     },
     {
       name: 'imagen3',
       type: 'upload',
       relationTo: 'media',
-      label: 'Imagen de Detalle Bento (Subir Archivo a Media)',
+      label: 'Imagen Secundaria Inferior',
+      required: false,
     },
   ],
 }

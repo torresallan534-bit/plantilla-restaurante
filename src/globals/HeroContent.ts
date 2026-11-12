@@ -1,15 +1,16 @@
 import type { GlobalConfig } from 'payload'
-import { anyoneCanRead, isStaff } from '../access/roles'
+import { anyoneCanRead, isSuperAdmin } from '../access/roles'
 
 export const HeroContent: GlobalConfig = {
   slug: 'hero-content',
   label: 'Hero (Cabecera Principal)',
   admin: {
     group: 'Contenido Web',
+    hidden: ({ user }) => user?.role !== 'superadmin',
   },
   access: {
     read: anyoneCanRead,
-    update: isStaff, // SuperAdmin y Admin (cualquier usuario) pueden editar el contenido de Hero
+    update: isSuperAdmin, // SOLO SuperAdmin puede editar la cabecera principal
   },
   fields: [
     {

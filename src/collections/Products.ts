@@ -90,16 +90,50 @@ export const Products: CollectionConfig = {
       label: 'Grupos de Opciones / Sabores / Variantes',
       admin: {
         description:
-          'Configura opciones para que el cliente elija (ej. Sabores de jugo, Bebida del combo, Término de carne, Salsas).',
+          'Configura opciones para que el cliente elija (ej. Sabores de jugo, Bebida del combo, Término de carne, Salsas, o Combos de N piezas).',
       },
       fields: [
         {
           name: 'titulo',
           type: 'text',
-          label: 'Título del Grupo (ej. Elige el Sabor, Bebida del Combo, Salsa)',
+          label: 'Título del Grupo (ej. Elige el Sabor, Elige tus 4 empanadas, Salsa)',
           required: true,
           admin: {
-            placeholder: 'Ej. Elige el Sabor',
+            placeholder: 'Ej. Elige tus 4 empanadas',
+          },
+        },
+        {
+          name: 'tipoSeleccion',
+          type: 'select',
+          label: 'Tipo de Selección',
+          defaultValue: 'unica',
+          required: true,
+          options: [
+            {
+              label: 'Opción Única (1 sola elección, ej. Sabor de jugo o término)',
+              value: 'unica',
+            },
+            {
+              label: 'Opción Múltiple / Cantidades de Combo (ej. Elige 4 empanadas)',
+              value: 'multiple',
+            },
+          ],
+          admin: {
+            description:
+              'Define si el cliente elige solo 1 opción o si es un combo con una cantidad específica de unidades repartidas.',
+          },
+        },
+        {
+          name: 'limiteSeleccion',
+          type: 'number',
+          label: 'Límite / Cantidad a Elegir',
+          defaultValue: 1,
+          min: 1,
+          admin: {
+            condition: (data, siblingData) => siblingData?.tipoSeleccion === 'multiple',
+            placeholder: '4',
+            description:
+              'Cantidad máxima de unidades que el cliente puede repartir entre las opciones del combo (ej. 4 empanadas).',
           },
         },
         {
@@ -120,7 +154,7 @@ export const Products: CollectionConfig = {
               label: 'Nombre de la Opción o Sabor',
               required: true,
               admin: {
-                placeholder: 'Ej. Maracuyá, Mora, Lulo, Coca-Cola',
+                placeholder: 'Ej. Empanada de Pollo, Maracuyá, Coca-Cola',
               },
             },
             {
